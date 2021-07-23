@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Servet</title>
+  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css"/>
+  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <style type="text/css">
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+<nav class="navbar navbar-light bg-light" style="background: #f8f8f8; border-bottom: 1px solid #bdbdbd;">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Tambos</span>
+    <span class="">Tambos</span>
+  </div>
+</nav>
+</header>
+
+<div class="row g-3">
+  <div class="col-sm-6 col-md-2">
+
+  <ul class="menu" style="list-style-type: none; padding: 0; border: 1px solid #bdbdbd; border-top: 0;">
+    <li><a class="dropdown-item" href="./adminControl.html">Admin</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+    <li style="height: 60em;"></li>
+    <li></li>
+  </ul>
+</div>
+  <div class="col-sm-6 col-md-10">
+      <div>
+      </div>
+      <div class="container" style="width: 50%;">
+        <div class="container px-4">
+          <div class="row gx-5">
+            <div class="col">
+             <button type="button" onclick="crearTambo()" class="btn btn-outline-success">Nuevo Tambo</button>
+             <button type="button" onclick="crearTablaTambos()" class="btn btn-outline-success">Tabla</button>
+            </div>
+            <div class="col">
+              <input type="text" name="" id="nombreTambo" size="20" placeholder="Nombre del Tambo" style="">
+            </div>
+          </div>
+        </div>
+        <div class="contenedorTabla"> 
+        </div>  
+      </div>
+  </div>
+</div>
+<script src="../js/inicio.js"></script>
+</body>
+</html>
