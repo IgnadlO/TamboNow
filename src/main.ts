@@ -2,6 +2,11 @@ import { app, BrowserWindow, Menu, ipcMain } from "electron";
 import * as path from "path";
 import Conexion from "./conexion";
 
+type tipoTambo = {
+  id: number,
+  nombre: string
+}
+
 class Main {
   static application = app;
   static ipcMain = ipcMain;
@@ -47,22 +52,34 @@ class Main {
   }
 }
 
+
 function main() {
+  let tamboActivo: tipoTambo;
   Main.application.on("window-all-closed", Main.onWindowsAllClosed);
   Main.application.on("ready", Main.onReady);
   Main.ipcMain.on("sinParametros", Main.puertoSinParametros);
   Main.ipcMain.on("conParametros", Main.puertoConParametros);
+  ipcMain.on("nuevoTamboActivo", cambiarTamboActivo);
+  ipcMain.on("verTamboActivo", event => {event.returnValue = tamboActivo});
+
+  function cambiarTamboActivo(event, arg){
+    tamboActivo = arg;
+    event.returnValue = true;
+  }
 
   const templateMenu = [
-  {
-   label: 'File',
-   submenu: [{
-     label: 'Salir',
-     click() {
-     alert('salir')
-     }
-  }]
-}]
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "Salir",
+          click() {
+            alert("salir");
+          },
+        },
+      ],
+    },
+  ];
 }
 
 main();
