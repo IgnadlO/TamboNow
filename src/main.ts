@@ -1,16 +1,9 @@
 import { app, BrowserWindow, Menu, ipcMain } from "electron";
 import * as path from "path";
-import Conexion from "./conexion";
+import Eventos from './eventos';
 
-type tipoTambo = {
-  id: number,
-  nombre: string
-}
-
-class Main {
+export default class Main {
   static application = app;
-  static ipcMain = ipcMain;
-  static conexion = Conexion;
   static mainWindow: BrowserWindow;
 
   private static createWindow() {
@@ -21,6 +14,9 @@ class Main {
             nodeIntegration: true,
             contextIsolation: false
         }
+        // webPreferences: {
+        //   preload: path.join(__dirname, '..', 'public', 'js', 'index.js')
+        // }
     });
     Main.mainWindow.loadFile(
       path.join(__dirname, "../public/views/index.html")
@@ -40,32 +36,13 @@ class Main {
       Main.application.quit();
     }
   }
-
-  static async puertoSinParametros(event,funcion) {
-    const respuesta = await Main.conexion.ruta(funcion, false);
-    event.returnValue = respuesta;
-  }
-
-  static async puertoConParametros(event, funcion, arg) {
-    const respuesta = await Main.conexion.ruta(funcion,arg);
-    event.returnValue = respuesta;
-  }
 }
 
 
 function main() {
-  let tamboActivo: tipoTambo;
   Main.application.on("window-all-closed", Main.onWindowsAllClosed);
   Main.application.on("ready", Main.onReady);
-  Main.ipcMain.on("sinParametros", Main.puertoSinParametros);
-  Main.ipcMain.on("conParametros", Main.puertoConParametros);
-  ipcMain.on("nuevoTamboActivo", cambiarTamboActivo);
-  ipcMain.on("verTamboActivo", event => {event.returnValue = tamboActivo});
-
-  function cambiarTamboActivo(event, arg){
-    tamboActivo = arg;
-    event.returnValue = true;
-  }
+  const eventos = new Eventos({id:3, nombre: "hola"});
 
   const templateMenu = [
     {

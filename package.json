@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && electron ./dist/main.js",
-    "build": "tsc"
+    "build": "tsc --p tsconfig.json && tsc --p public/tsconfig.render.json",
+    "watch": "tsc --watch --p public/tsconfig.render.json"
   },
   "keywords": [],
   "author": "",

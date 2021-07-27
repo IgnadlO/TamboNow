@@ -21,24 +21,46 @@ export default class Conexion {
 	}
 
 	private static crearTambo(name) {
-		console.log("crearTambo se activo");
-		const data = {
-			nombre: name,
-		};
-		Conexion.db.serialize(() => {
-			Conexion.db.run(
-				"INSERT INTO tambos(nombre) VALUES(?)",
-				[name],
-				(err) => {
-					if (err) {
-						throw err;
-						console.log(err);
+		console.log(name);
+		return new Promise((resolve, rej) =>{
+			Conexion.db.serialize(() => {
+				Conexion.db.run(
+					"INSERT INTO tambos(nombre) VALUES(?); SELECT SCOPE_IDENTITY();",
+					[name],
+					(err, res) => {
+						if (err) {
+							rej(err);
+							console.log(err);
+						} else {
+							console.log("Tambo creado");
+							console.log(res);
+							resolve(res);
+						}
 					}
-					console.log("Tambo creado");
-				}
-			);
+				);
+			});
 		});
-		return "hello world!";
+	}
+
+	private static borrarTambo(tambo){
+		return new Promise((res, rej) => {
+			Conexion.db.run('DELETE FROM tambos WHERE id = ?', tambo.id, (err) => {
+				if(err){ 
+					console.log(err);
+					rej(false);
+				}
+				res(true);
+			});
+		});
+	}
+
+	private static get obtenerUltimoId(){
+		return new Promise((res, rej) => {
+			Conexion.db.all('SELECT SCOPE_IDENTITY()', (err, result) => {
+				if(err) console.log(err)
+				res(result);
+			});
+		});
 	}
 
 	private static leerTambo() {
