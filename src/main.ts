@@ -42,7 +42,7 @@ export default class Main {
 function main() {
   Main.application.on("window-all-closed", Main.onWindowsAllClosed);
   Main.application.on("ready", Main.onReady);
-  const eventos = new Eventos({id:3, nombre: "hola"});
+  Eventos.main();
 
   const templateMenu = [
     {

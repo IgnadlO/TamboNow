@@ -8,7 +8,7 @@ type datosPrincipales = {
 	parto: string,
 	del: number,
 	tacto: string | null,
-	tambo: string
+	tambo: number
 };
 
 export default class Conexion {
@@ -25,7 +25,7 @@ export default class Conexion {
 		return new Promise((resolve, rej) =>{
 			Conexion.db.serialize(() => {
 				Conexion.db.run(
-					"INSERT INTO tambos(nombre) VALUES(?); SELECT SCOPE_IDENTITY();",
+					"INSERT INTO tambos(nombre) VALUES(?)",
 					[name],
 					(err, res) => {
 						if (err) {
@@ -33,11 +33,19 @@ export default class Conexion {
 							console.log(err);
 						} else {
 							console.log("Tambo creado");
-							console.log(res);
-							resolve(res);
+							resolve(Conexion.obtenerTamboId(name));
 						}
 					}
 				);
+			});
+		});
+	}
+
+	private static obtenerTamboId(nombre){
+		return new Promise((res, rej) => {
+			Conexion.db.all('SELECT * FROM tambos WHERE nombre = ?', nombre, (err, result) => {
+				if(err) console.log(err)
+				res(result);
 			});
 		});
 	}
@@ -50,15 +58,6 @@ export default class Conexion {
 					rej(false);
 				}
 				res(true);
-			});
-		});
-	}
-
-	private static get obtenerUltimoId(){
-		return new Promise((res, rej) => {
-			Conexion.db.all('SELECT SCOPE_IDENTITY()', (err, result) => {
-				if(err) console.log(err)
-				res(result);
 			});
 		});
 	}
@@ -76,16 +75,21 @@ export default class Conexion {
 
 	private static nuevoControlPrincipal(datos: datosPrincipales[]){
 		return new Promise((res, rej) => {
-			Conexion.db.run('INSERT INTO datosPrincipales VALUES(?)', datos, err => {
-				if(err) rej(err);
-				else res(true);
-			})
+			for (let dato of datos){
+				Conexion.db.run('INSERT INTO datosPrincipales(rp,lactancia,parto,del,tacto,tambo) VALUES(?,?,?,?,?,?)', 
+					[dato.rp,dato.lactancia,dato.parto,dato.del,dato.tacto,dato.tambo],
+					err => {
+					if(err) rej(err);
+					console.log(err)
+				})
+			}
+			res(true);
 		})
 	}
 
-	private static verControlPrincipal(tambo: string){
+	private static verControlPrincipal(tambo: number){
 		return new Promise((res, rej) => {
-			Conexion.db.all("SELECT * FROM datosPrincipales WHERE tambo = ?", tambo, (err, result) => {
+			Conexion.db.all("SELECT * FROM datosPrincipales", (err, result) => {
 				if (err) {
 					console.log(err);
 					rej(err);

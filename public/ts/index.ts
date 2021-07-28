@@ -24,7 +24,8 @@ class manejoTambos {
     if (manejoTambos.tambosNombre.includes(nombre)) console.log("ya existe");
     else {
       const send = ipcRenderer.sendSync("conParametros", "crearTambo", nombre);
-      console.log(send);
+      ipcRenderer.sendSync("nuevoTamboActivo", send[0]);
+      Ui.cambiarPestañaControl();
     }
   }
 
@@ -60,8 +61,8 @@ class Ui {
     }
   }
 
-  static borrarTamboValidar(tambo) {
-    Ui.tamboSeleccionado = tambo;
+  static borrarTamboValidar(e) {
+    Ui.tamboSeleccionado = JSON.parse(e.target.id);
     Ui.cuadroValidacion = document.createElement("div");
     Ui.cuadroValidacion.id = "validacion";
     Ui.cuadroValidacion.innerHTML = `
@@ -85,8 +86,9 @@ class Ui {
   }
 
   static borrarTamboBotones(e) {
-    if (e.target.value == "aceptar") {
-      console.log("se borro el tambo " + Ui.tamboSeleccionado.nombre);
+    if (e.target.innerHTML == "aceptar") {
+      const confirmacion = ipcRenderer.sendSync('conParametros', 'borrarTambo', Ui.tamboSeleccionado)
+      if(confirmacion) console.log("se borro el tambo " + Ui.tamboSeleccionado.nombre);
       Ui.crearTablaTambos(manejoTambos.recolectarTambos);
     }
     document.getElementById("contenedor")!.removeChild(Ui.cuadroValidacion);
@@ -102,14 +104,21 @@ class Ui {
     <thead>
         <tr>
           <th scope="col">Tambos</th>
+          <th scope="col">Borrar</th>
         </tr>
       </thead>`;
     const tbody = document.createElement("tbody");
     for (let i = 0; i <= lista.length - 1; i++) {
-      const item = document.createElement("tr");
-      item.innerHTML = `<th scope="row">${lista[i].nombre}</th>`;
-      item.addEventListener("click", Ui.presionoUnTambo);
-      tbody.appendChild(item);
+      const registro = document.createElement("tr");
+      const crearTh = (inner, evento) => {
+        const item = document.createElement('th');
+        item.innerHTML = inner;
+        item.addEventListener('click', Ui[evento]);
+        registro.appendChild(item);
+      }
+      crearTh(lista[i].nombre, 'presionoUnTambo');
+      crearTh(`<buttom id='${JSON.stringify(lista[i])}' class="boton__borrar"> X </buttom>`, 'borrarTamboValidar')
+      tbody.appendChild(registro);
     }
     tabla.appendChild(tbody);
     fragmento.appendChild(tabla);
