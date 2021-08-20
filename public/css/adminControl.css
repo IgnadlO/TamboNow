@@ -1,0 +1,75 @@
+.contenedor {
+	border: 1px solid #999;
+	width: 80%;
+	border-radius: 10px;
+	padding: 1.5%;
+	min-width: 400px;
+	min-height: 100px;
+	margin: 3vh auto;
+	max-height: 55vh;
+	display: flex;
+	justify-content: space-between;
+}
+
+.contenedor__input {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.input__fecha{
+	display: flex;
+	flex-direction: column;
+}
+
+.contenedor__boton {
+	display: flex;
+}
+
+.botones {
+	display: flex;
+	flex-direction: column;
+}
+
+.amarillo { 
+	border-color: #ffc107;
+	color: #ffc107;
+	margin-top: 5px;
+}
+
+.amarillo:hover { 
+	background: #ffc107;
+	color: #fff; 
+}
+
+.rojo { 
+	border-color: #dc3545;
+	color: #dc3545;
+	margin-left: 5px;
+	height: 100%;
+}
+
+.rojo:hover { 
+	background: #dc3545;
+	color: #fff; 
+}
+
+input[type="text"]{
+	font-size: 20px;
+	padding: 5px 5px;
+}
+
+.contenedor__tabla {
+	height: 250px;
+}
+
+.borrar {
+	color: red;
+	padding: 0;
+}
+
+.contenedor__tabla {
+	height: 60vh;
+}
+
+tr {cursor: pointer;}

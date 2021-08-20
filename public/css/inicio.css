@@ -1,0 +1,33 @@
+.contenedor {
+	margin: auto;
+	border: 1px solid #999;
+	width: 50%;
+	border-radius: 10px;
+	padding: 1.5%;
+	min-width: 400px;
+	margin-top: 10vh;
+	max-height: 55vh;
+}
+
+.contenedor__input {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-bottom: 2.5%;
+}
+
+input[type="text"] {
+	font-size: 20px;
+	padding: 5px 5px;
+}
+
+.contenedor__tabla {
+	height: 250px;
+}
+
+.borrar {
+	color: red;
+	padding: 0;
+}
+
+tr {cursor: pointer;}

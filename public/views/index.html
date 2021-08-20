@@ -1,59 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Servet</title>
-  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css"/>
-  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-  <style type="text/css">
-    body {
-      height: 100%;
-      overflow: hidden;
-    }
-  </style>
+	<meta charset="utf-8">
+	<title>Index</title>
+	<link rel="stylesheet" type="text/css" href="../css/index.css">
+	<link rel="stylesheet" type="text/css" href="../css/inicio.css">
 </head>
-
 <body>
-<header>
-<nav class="navbar navbar-light bg-light" style="background: #f8f8f8; border-bottom: 1px solid #bdbdbd;">
-  <div class="container-fluid">
-    <span class="navbar-brand mb-0 h1">Tambos</span>
-    <span class="">Tambos</span>
-  </div>
-</nav>
-</header>
+	<ul class="header__lista"><!-- Botones de la barra -->
+    <li class="header__item" style="width: 15em;">
+    	<div class="header__Tambo">
+    		<a class="header__dr" style="padding-left: 15px;" href="#">Tambo</a>
+    	</div>
+    </li>
+    <li class="header__flex">
+    	<span class="header__dr">Inicio</span>
+    </li>
+</ul>
+	<nav class="menu" id="menu">
+		<div class="menu__contenido">
+			<div class="menu__texto">
+				<label class="texto menu__option">Tambos Existentes</label>
+			</div>
+			<a href="./adminControl.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">San Bernardo</label>
+				</div>
+			</a>
+			<a href="Inventario">
+				<div class="menu__opcion">
+					<label class="texto menu__link">San Pedro</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Raul</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Sendero Luminoso</label>
+				</div>
+			</a>
+			<a href="cupones">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Fuentes del Paso</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Tambo Rojo</label>
+				</div>
+			</a>
+		</div>
+	</nav>
+<main>
+	<div></div>
+	<div class="contenedor">
+		<div class="contenedor__input">
+			<button class="boton">Nuevo Tambo</button>
+			<input type="text" placeholder="Ingrese Tambo" size="16">
+		</div>
+		<div class="thead">
+			<label class="tabla__titulo">Tambos</label>
+		</div>
+		<div class="contenedor__tabla scroll">
+        <table class="table">
+        <tbody>
+        <tr>
+            <td>San Bernardo</td><td class="borrar">X</td>
+        </tr>
+        <tr>
+            <td>San Pedro</td><td class="borrar">X</td>
+        </tr>
+        <tr>
+            <td>Raul</td><td class="borrar">X</td>
+        </tr>
+        <tr>
+            <td>Sendero Luminoso</td><td class="borrar">X</td>
+        </tr>
+        <tr>
+            <td>Fuentes del Paso</td><td class="borrar">X</td>
+        </tr>
+        <tr>
+            <td>Tambo Rojo</td><td class="borrar">X</td>
+        </tr>
+        </tbody>
+    </table>    
+		</div>
+	</div>
 
-<div class="row g-3">
-  <div class="col-sm-6 col-md-2">
-
-  <ul class="menu" style="list-style-type: none; padding: 0; border: 1px solid #bdbdbd; border-top: 0;">
-    <li><a class="dropdown-item" href="./adminControl.html">Admin</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-    <li style="height: 60em;"></li>
-    <li></li>
-  </ul>
-</div>
-  <div class="col-sm-6 col-md-10">
-      <div>
-      </div>
-      <div class="container" style="width: 50%;" id="contenedor">
-        <div class="container px-4">
-          <div class="row gx-5">
-            <div class="col">
-             <button type="button" id="nuevoTambo" class="btn btn-outline-success">Nuevo Tambo</button>
-            </div>
-            <div class="col">
-              <input type="text" id="nombreTambo" size="20" placeholder="Nombre del Tambo" style="">
-            </div>
-          </div>
-        </div>
-        <div class="contenedorTabla"> 
-        </div>  
-      </div>
-  </div>
-</div>
-<script type="module" src="../js/index.js"></script>
+</main>
 </body>
 </html>

@@ -1,70 +1,119 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Servet</title>
-  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css"/>
-  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-  <style type="text/css">
-    body {
-      height: 100%;
-      overflow: hidden;
-    }
-  </style>
+	<meta charset="utf-8">
+	<title>Control</title>
+	<link rel="stylesheet" type="text/css" href="../css/index.css">
+	<link rel="stylesheet" type="text/css" href="../css/adminControl.css">
 </head>
-
 <body>
-<header>
-    <div class="row" style="border: 1px solid #bdbdbd; padding: 10px; background: #f8f8f8;">
-      <div class="col-sm-2 h5" id="tamboActivo" style="margin: 0;">Tambo</div>
-      <div class="col-sm-10 h5" style="text-align: center; margin: 0;">Administrador de Vacas</div>
-    </div>
-</header>
-
-<div class="row g-3">
-  <div class="col-sm-6 col-md-2">
-
-  <ul class="menu" style="list-style-type: none; padding: 0; border: 1px solid #bdbdbd; border-top: 0;">
-    <li><a class="dropdown-item" href="./index.html">Inicio</a></li>
-    <li><a class="dropdown-item" href="./adminControl.html">Administrador de Vacas</a></li>
-    <li><a class="dropdown-item" href="./controlCs.html">Control de C.S.</a></li>
-    <li><a class="dropdown-item" href="./historico.html">Historico</a></li>
-    <li style="height: 20em;"></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><span>Reportes</span></li>
-    <li><a class="dropdown-item" href="#">Conteo</a></li>
-    <li style="height: 30em"></li>
-  </ul>
-</div>
-  <div class="col-sm-6 col-md-10">
-    <!-------------------------------- Inicia aca ------------------------------------------------>
-    <div style="width: 70%; margin: auto; padding: 15px;">
-      <div class="row">
-        <div class="col">
-          <span>Fecha de control:</span>
-          <form id="formControl">
-            <input type="date" id="fechaControl"><br><br>
-            <input type="file" id="fileExcel">
-          </form>
-        </div>
-        <div class="col-6">
-        </div>
-        <div class="col">
-          <button type="button" id="aceptar" class="btn btn-outline-success"style=" width: 100px; margin: 5px;" >Aceptar</button><br>
-          <button type="button" class="btn btn-outline-warning"style=" width: 100px; margin: 5px;" >Ayuda</butto>
-          <button type="button" id="cancelar" class="btn btn-outline-danger" style=" transform: scale(1, 2);" >X</button>
-        </div>
-      </div>
-    </div>
-    <!-- Inicio de la tabla -->
-    <div class="contenedorTabla">
-      
-    </div>
-<!-- Fin de la tabla -->
-  </div>
-</div>
-
-<script type="module" src="../js/admin.js"></script>
+	<ul class="header__lista"><!-- Botones de la barra -->
+    <li class="header__item" style="width: 15em;">
+    	<div class="header__Tambo">
+    		<a class="header__dr" style="padding-left: 15px;" href="/">San Bernardo</a>
+    	</div>
+    </li>
+    <li class="header__flex">
+    	<span class="header__dr">Administrador de Vacas</span>
+    </li>
+</ul>
+	<nav class="menu" id="menu">
+		<div class="menu__contenido">
+			<a href="./index.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Inicio</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link select">Administrador de Vacas</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Control de C.S.</label>
+				</div>
+			</a>
+			<a href="./tanque.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">%Tanque</label>
+				</div>
+			</a>
+		</div>
+		<div class="menu__pie">
+			<div class="menu__texto">
+				<label class="texto menu__option">Reportes</label>
+			</div>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Conteo de C.S.</label>
+				</div>
+			</a>
+			<a href="#">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Mastitis Clinica</label>
+				</div>
+			</a>
+		</div>
+	</nav>
+<main>
+	<div class="contenedor">
+		<div class="contenedor__input">
+			<div class="input__fecha">
+				<label>Fecha del Control:</label>
+				<input type="date" >
+			</div>
+			<label class="boton">
+			<input type="file" name="">
+			Subir Archivo
+			</label>
+		</div>
+		<div class="contenedor__boton">
+			<div class="botones">
+				<button class="boton">Aceptar</button>
+				<button class="boton amarillo">Ayuda</button>
+			</div>
+			<button class="boton rojo">X</button>
+		</div>
+	</div>
+	<div>
+		<!-- <div class="thead">
+			<label class="tabla__titulo">N°</label>
+			<label class="tabla__titulo">RP</label>
+			<label class="tabla__titulo">Lactancia</label>
+			<label class="tabla__titulo">Fecha</label>
+			<label class="tabla__titulo">DEL</label>
+			<label class="tabla__titulo">Tacto</label>
+			<label class="tabla__titulo">Leche</label>
+			<label class="tabla__titulo">Rcs</label>
+			<label class="tabla__titulo">Score</label>
+		</div> -->
+		<div class="contenedor__tabla scroll">
+        	<table class="table">
+        	<thead>
+				<th>N°</th>
+				<th>RP</th>
+				<th>Lactancia</th>
+				<th>Fecha</th>
+				<th>DEL</th>
+				<th>Tacto</th>
+				<th>Leche</th>
+				<th>Rcs</th>
+				<th>Score</th>
+			</thead>
+        		<tbody>
+        			<tr>
+            			<td>1</td><td>6689</td><td>6</td><td>01/03/20</td><td>177</td><td>P</td><td>19,2</td><td>464</td><td>5,2</td>
+        			</tr>
+        			<tr>
+            			<td>1</td><td>6689</td><td>6</td><td>01/03/20</td><td>177</td><td>P</td><td>19,2</td><td>464</td><td>5,2</td>
+        			</tr>
+        		</tbody>
+    		</table>    
+		</div>
+	<div>
+		
+	</div>
+</main>
 </body>
 </html>
