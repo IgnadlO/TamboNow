@@ -1,5 +1,9 @@
 /*-----------------Cosas----------------------*/
-body{ margin: 0; }
+body{ 
+    margin: 0;
+    background: #fff
+}
+
 main{ margin-left: 15em; }
 
 label {
@@ -62,9 +66,7 @@ label {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 9vh;
-    max-height: 72px;
-    min-height: 52.7px;
+    height: 6.5vh;
     top: 0;
     z-index: 100;
     position: sticky;
@@ -79,8 +81,7 @@ label {
 
 .header__Tambo{
     /*border-right: 1px solid #bdbdbd;*/
-    height: 9vh;
-    max-height: 72px;
+    height: 6.5vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,7 +89,7 @@ label {
 }
 
 .header__flex{
-    height: 9vh;
+    height: 6.5vh;
     max-height: 72px;
     display: flex;
     justify-content: center;
@@ -107,10 +108,10 @@ label {
 
 /*-----------MenuLateral-------------*/
 .menu{
-    top: 9vh;
+    top: 6.5vh;
     position: fixed;
     left: 0;
-    height: 91vh;
+    height: 93.5vh;
     border-right: 1px solid #999;
     width: 15em;
     background: #f7f7f7;

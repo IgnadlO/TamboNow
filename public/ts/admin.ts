@@ -1,54 +1,19 @@
 const xlsx = require("xlsx");
 const path = require("path");
 const { ipcRenderer } = require("electron");
-
-type datosExcel = {
-  Rp: number;
-  Lactancia: number;
-  Parto: string;
-  Fecha: number;
-  Tacto: string | null;
-  Leche: number;
-  Rcs: number;
-};
-
-type datosPrin = {
-  rp: number;
-  lactancia: number;
-  parto: string;
-  del: number;
-  tacto: string | null;
-  tambo: number;
-};
-
-type datosSec = {
-  leche: number | null;
-  rcs: number | null;
-  totalCs: number | null;
-  tanque: number;
-  score: number | null;
-  fecha: string;
-  idVaca: number;
-};
-
-type datosTambos = {
-  id: number;
-  nombre: string;
-};
+import {datosPrin, datosSec, datosTambo, datosExcel} from '../../servet';
 
 let datosTambo: datosPrin[] = [];
-let datosTamboSec: datosSec[] = [];
+let datosTamboec: datosSec[] = [];
 let del: number[] = [];
 
 class UiC {
-  private static tamboActivo: datosTambos =
-    ipcRenderer.sendSync("verTamboActivo");
+  private static tamboActivo: datosTambo = ipcRenderer.sendSync("verTamboActivo");
   private static botonAceptar = document.getElementById("aceptar")!;
   private static botonCancelar = document.getElementById("cancelar")!;
-  private static formControl = document.getElementById(
-    "formControl"
-  )! as HTMLFormElement;
+  private static formControl = document.getElementById("formControl")! as HTMLFormElement;
   private static formFile = document.getElementById("fileExcel")!;
+  private static tabla = document.querySelector(".table")!;
 
   static main() {
     UiC.botonAceptar.addEventListener("click", UiC.subirControl);
@@ -57,7 +22,8 @@ class UiC {
   }
 
   static borrarTabla() {
-    document.querySelector(".contenedorTabla")!.innerHTML = "";
+    if (UiC.tabla.children.length >= 2)
+      UiC.tabla.removeChild(UiC.tabla.lastElementChild!);
     for (let i in datosTambo) datosTambo.pop();
     UiC.formControl.reset();
   }
@@ -79,9 +45,7 @@ class UiC {
       if (!eReader.target) return 0;
       const readerResult = eReader.target.result as ArrayBuffer;
       const excel = xlsx.read(new Uint8Array(readerResult), { type: "array" });
-      const datos: datosExcel[] = xlsx.utils.sheet_to_json(
-        excel.Sheets["subir"]
-      );
+      const datos: datosExcel[] = xlsx.utils.sheet_to_json(excel.Sheets["subir"]);
       const calcularDel = (fecha) =>
         Math.floor(
           (new Date(fechaControl).getTime() - new Date(fecha).getTime()) /
@@ -99,7 +63,7 @@ class UiC {
           tambo: UiC.tamboActivo.id,
         });
         const esNull = datos[i].Leche == undefined || datos[i].Rcs == undefined? true: false;
-        datosTamboSec.push({
+        datosTamboec.push({
           leche: esNull ? null : datos[i].Leche,
           rcs: esNull ? null : datos[i].Rcs,
           totalCs: esNull ? null : datos[i].Leche * datos[i].Rcs,
@@ -108,55 +72,35 @@ class UiC {
           fecha: fechaControl,
           idVaca: i,
         });
-        sumaCs += esNull ? 0 : datosTamboSec[i].totalCs!;
+        sumaCs += esNull ? 0 : datosTamboec[i].totalCs!;
       }
-      for (let dato of datosTamboSec)
+      for (let dato of datosTamboec)
         dato.tanque = dato.totalCs == null ? 0 : (dato.totalCs / sumaCs) * 100!;
-      UiC.crearTablaControl(datosTambo, datosTamboSec);
+      UiC.crearTablaControl(datosTambo, datosTamboec);
     };
     reader.readAsArrayBuffer(f);
   }
 
   static crearTablaControl(datos, datosSec) {
-    const contenedor = document.querySelector(".contenedorTabla")!;
-    contenedor.innerHTML = "";
-    const fragmento = document.createDocumentFragment();
-    const tabla = document.createElement("table");
-    tabla.classList.add("table", "table-striped");
-    tabla.innerHTML = `
-    <thead>
-        <tr>
-          <th scope="col">N°</th>
-          <th scope="col">RP</th>
-          <th scope="col">Lactancia</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Del</th>
-          <th scope="col">Tacto</th>
-          <th scope="col">Leche</th>
-          <th scope="col">Rcs</th>
-        </tr>
-      </thead>`;
     const tbody = document.createElement("tbody");
     const vaciarDato = (dato) => (dato == null ? "" : dato);
     for (let i = 0; i <= datos.length - 1; i++) {
       const item = document.createElement("tr");
       const crearCampo = (dato, id: number, tipo: string) => {
         const campo = document.createElement("td");
-        campo.innerText = dato;
+        campo.innerText = (tipo == "score" && dato != null)? dato.toFixed(2) : dato;
         campo.id = (tipo == "parto" ? "s" : "n") + "/" + id + "/" + tipo;
         campo.addEventListener("click", UiC.editarCampo);
         return campo;
       };
-      item.innerHTML = `<th scope="row">${i}</th>`;
+      item.innerHTML = `<td scope="row">${i}</td>`;
       for (let sub of ["rp", "lactancia", "parto", "del", "tacto"])
         item.appendChild(crearCampo(datos[i][sub], i, sub));
-      for (let sub of ["leche", "rcs"])
+      for (let sub of ["leche", "rcs", "score"])
         item.appendChild(crearCampo(datosSec[i][sub], i, sub));
       tbody.appendChild(item);
     }
-    tabla.appendChild(tbody);
-    fragmento.appendChild(tabla);
-    contenedor.appendChild(fragmento);
+    UiC.tabla.appendChild(tbody);
   }
   //(e.target.id[0] == 's')? 'text': 'number'
   static editarCampo(e) {
@@ -212,9 +156,7 @@ class UiC {
   }
 
   static subirControl(e) {
-    const elemento = document.getElementById(
-      "fechaControl"
-    )! as HTMLInputElement;
+    const elemento = document.getElementById("fechaControl")! as HTMLInputElement;
     const fechaControl = elemento.value;
     if (!fechaControl || !datosTambo || datosTambo.length == 0) {
       console.log("falta informacion");
@@ -225,7 +167,11 @@ class UiC {
   }
 }
 
-UiC.mostrarTamboActivo();
-UiC.main();
+function main(){
+   UiC.mostrarTamboActivo();
+   UiC.main();
+}
+
+main();
 
 export {};

@@ -17,7 +17,7 @@
 	justify-content: space-between;
 }
 
-.input__fecha{
+.input__fecha {
 	display: flex;
 	flex-direction: column;
 }
@@ -31,36 +31,36 @@
 	flex-direction: column;
 }
 
-.amarillo { 
+.amarillo {
 	border-color: #ffc107;
 	color: #ffc107;
 	margin-top: 5px;
 }
 
-.amarillo:hover { 
+.amarillo:hover {
 	background: #ffc107;
-	color: #fff; 
+	color: #fff;
 }
 
-.rojo { 
+.rojo {
 	border-color: #dc3545;
 	color: #dc3545;
 	margin-left: 5px;
 	height: 100%;
 }
 
-.rojo:hover { 
+.rojo:hover {
 	background: #dc3545;
-	color: #fff; 
+	color: #fff;
 }
 
-input[type="text"]{
+input[type="text"] {
 	font-size: 20px;
 	padding: 5px 5px;
 }
 
-.contenedor__tabla {
-	height: 250px;
+input[type="date"] {
+	font-size: 16px;
 }
 
 .borrar {
@@ -68,8 +68,6 @@ input[type="text"]{
 	padding: 0;
 }
 
-.contenedor__tabla {
-	height: 60vh;
-}
+.contenedor__tabla { max-height: 60vh; }
 
-tr {cursor: pointer;}
+tr { cursor: pointer; }

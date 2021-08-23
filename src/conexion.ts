@@ -1,15 +1,7 @@
 import * as path from "path";
 import * as sqlite3 from "sqlite3";
+import { datosPrin } from '../servet'
 sqlite3.verbose();
-
-type datosPrincipales = {
-	rp: number,
-	lactancia: number,
-	parto: string,
-	del: number,
-	tacto: string | null,
-	tambo: number
-};
 
 export default class Conexion {
 	private static rutas: object;
@@ -73,7 +65,7 @@ export default class Conexion {
 		});
 	}
 
-	private static nuevoControlPrincipal(datos: datosPrincipales[]){
+	private static nuevoControlPrincipal(datos: datosPrin[]){
 		return new Promise((res, rej) => {
 			for (let dato of datos){
 				Conexion.db.run('INSERT INTO datosPrincipales(rp,lactancia,parto,del,tacto,tambo) VALUES(?,?,?,?,?,?)', 

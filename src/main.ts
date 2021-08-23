@@ -21,7 +21,7 @@ export default class Main {
     Main.mainWindow.loadFile(
       path.join(__dirname, "../public/views/index.html")
     );
-    Main.mainWindow.webContents.openDevTools();
+    // Main.mainWindow.webContents.openDevTools();
   }
 
   static onReady() {
@@ -37,7 +37,6 @@ export default class Main {
     }
   }
 }
-
 
 function main() {
   Main.application.on("window-all-closed", Main.onWindowsAllClosed);

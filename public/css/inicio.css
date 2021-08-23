@@ -22,7 +22,7 @@ input[type="text"] {
 }
 
 .contenedor__tabla {
-	height: 250px;
+	max-height: 250px;
 }
 
 .borrar {
@@ -30,4 +30,4 @@ input[type="text"] {
 	padding: 0;
 }
 
-tr {cursor: pointer;}
+tr { cursor: pointer; }

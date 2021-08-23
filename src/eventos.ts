@@ -1,14 +1,10 @@
 import { ipcMain } from "electron";
 import conexion from "./conexion";
 import Main from "./main";
-
-type tipoTambo = {
-	id: number;
-	nombre: string;
-};
+import { datosTambo } from '../servet'
 
 export default class Eventos {
-	public static tamboActivo: tipoTambo;
+	public static tamboActivo: datosTambo;
 
 	static main() {
 		ipcMain.on("sinParametros", Eventos.puertoSinParametros);

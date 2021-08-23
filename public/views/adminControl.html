@@ -10,7 +10,7 @@
 	<ul class="header__lista"><!-- Botones de la barra -->
     <li class="header__item" style="width: 15em;">
     	<div class="header__Tambo">
-    		<a class="header__dr" style="padding-left: 15px;" href="/">San Bernardo</a>
+    		<a class="header__dr" id="tamboActivo" style="padding-left: 15px;" href="#"></a>
     	</div>
     </li>
     <li class="header__flex">
@@ -29,9 +29,9 @@
 					<label class="texto menu__link select">Administrador de Vacas</label>
 				</div>
 			</a>
-			<a href="#">
+			<a href="./cronicas.html">
 				<div class="menu__opcion">
-					<label class="texto menu__link">Control de C.S.</label>
+					<label class="texto menu__link">Cronicas</label>
 				</div>
 			</a>
 			<a href="./tanque.html">
@@ -58,22 +58,22 @@
 	</nav>
 <main>
 	<div class="contenedor">
-		<div class="contenedor__input">
+		<form class="contenedor__input" id="formControl">
 			<div class="input__fecha">
 				<label>Fecha del Control:</label>
-				<input type="date" >
+				<input type="date" id="fechaControl">
 			</div>
 			<label class="boton">
-			<input type="file" name="">
+			<input type="file" id="fileExcel" name="">
 			Subir Archivo
 			</label>
-		</div>
+		</form>
 		<div class="contenedor__boton">
 			<div class="botones">
-				<button class="boton">Aceptar</button>
+				<button class="boton" id="aceptar">Aceptar</button>
 				<button class="boton amarillo">Ayuda</button>
 			</div>
-			<button class="boton rojo">X</button>
+			<button class="boton rojo" id="cancelar">X</button>
 		</div>
 	</div>
 	<div>
@@ -102,12 +102,9 @@
 				<th>Score</th>
 			</thead>
         		<tbody>
-        			<tr>
+        			<!-- <tr>
             			<td>1</td><td>6689</td><td>6</td><td>01/03/20</td><td>177</td><td>P</td><td>19,2</td><td>464</td><td>5,2</td>
-        			</tr>
-        			<tr>
-            			<td>1</td><td>6689</td><td>6</td><td>01/03/20</td><td>177</td><td>P</td><td>19,2</td><td>464</td><td>5,2</td>
-        			</tr>
+        			</tr> -->
         		</tbody>
     		</table>    
 		</div>
@@ -115,5 +112,6 @@
 		
 	</div>
 </main>
+<script type="module" src="../js/admin.js"></script>
 </body>
 </html>

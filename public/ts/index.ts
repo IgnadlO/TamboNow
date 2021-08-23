@@ -1,10 +1,6 @@
 const path = require("path");
 const { ipcRenderer } = require("electron");
-
-type datosTambo = {
-  id: number;
-  nombre: string;
-};
+import {datosTambo} from '../../servet';
 
 class manejoTambos {
   static tambos: datosTambo[];
@@ -46,6 +42,7 @@ class manejoTambos {
 class Ui {
   private static botonCrearTambo = document.getElementById("nuevoTambo");
   private static inputBuscador = document.getElementById("nombreTambo");
+  private static listaTambos = document.querySelector(".menu__contenido")!;
   private static tamboSeleccionado: datosTambo;
   private static cuadroValidacion: HTMLElement;
 
@@ -53,10 +50,7 @@ class Ui {
     if (!Ui.botonCrearTambo || !Ui.inputBuscador)
       console.log("no se encuenta el elemento");
     else {
-      Ui.botonCrearTambo.addEventListener(
-        "click",
-        manejoTambos.crearNuevoTambo
-      );
+      Ui.botonCrearTambo.addEventListener("click", manejoTambos.crearNuevoTambo);
       Ui.inputBuscador.addEventListener("keyup", Ui.buscador);
     }
   }
@@ -89,44 +83,47 @@ class Ui {
     if (e.target.innerHTML == "aceptar") {
       const confirmacion = ipcRenderer.sendSync('conParametros', 'borrarTambo', Ui.tamboSeleccionado)
       if(confirmacion) console.log("se borro el tambo " + Ui.tamboSeleccionado.nombre);
-      Ui.crearTablaTambos(manejoTambos.recolectarTambos);
+      const tambos = manejoTambos.recolectarTambos;
+      Ui.crearTablaTambos(tambos);
+      Ui.crearListaTambos(tambos);
     }
     document.getElementById("contenedor")!.removeChild(Ui.cuadroValidacion);
   }
 
   static crearTablaTambos(lista) {
-    const contenedor = document.querySelector(".contenedorTabla")!;
-    contenedor.innerHTML = "";
-    const fragmento = document.createDocumentFragment();
-    const tabla = document.createElement("table");
-    tabla.classList.add("table", "table-striped", "table-hover");
-    tabla.innerHTML = `
-    <thead>
-        <tr>
-          <th scope="col">Tambos</th>
-          <th scope="col">Borrar</th>
-        </tr>
-      </thead>`;
+    const tabla = document.querySelector(".table")!;
+    if (tabla.firstElementChild)
+      tabla.removeChild(tabla.firstElementChild)
     const tbody = document.createElement("tbody");
-    for (let i = 0; i <= lista.length - 1; i++) {
-      const registro = document.createElement("tr");
-      const crearTh = (inner, evento) => {
-        const item = document.createElement('th');
+    const crearTd = (inner, evento, registro, id?) => {
+        const item = document.createElement('td');
         item.innerHTML = inner;
+        item.id = (id)? id: '';
         item.addEventListener('click', Ui[evento]);
         registro.appendChild(item);
       }
-      crearTh(lista[i].nombre, 'presionoUnTambo');
-      crearTh(`<buttom id='${JSON.stringify(lista[i])}' class="boton__borrar"> X </buttom>`, 'borrarTamboValidar')
+    for (let i = 0; i <= lista.length - 1; i++) {
+      const registro = document.createElement("tr");
+      crearTd(lista[i].nombre, 'presionoUnTambo', registro, lista[i].nombre);
+      crearTd(`<buttom id='${JSON.stringify(lista[i])}' class="borrar"> X </buttom>`, 'borrarTamboValidar', registro)
       tbody.appendChild(registro);
     }
     tabla.appendChild(tbody);
-    fragmento.appendChild(tabla);
-    contenedor.appendChild(fragmento);
+  }
+
+  static crearListaTambos(lista) {
+    for (let dato of lista) {
+      Ui.listaTambos.insertAdjacentHTML("beforeend",`
+          <div class="menu__opcion" id="${dato.nombre}">
+            <label class="texto menu__link" id="${dato.nombre}">${dato.nombre}</label>
+          </div>
+          `);
+      Ui.listaTambos.lastElementChild!.addEventListener('click', Ui.presionoUnTambo);
+    }
   }
 
   static presionoUnTambo(e) {
-    manejoTambos.seleccionarTambo(e.target.innerText);
+    manejoTambos.seleccionarTambo(e.target.id);
   }
 
   static buscador(e) {
@@ -135,6 +132,7 @@ class Ui {
       if (value.nombre.includes(valor)) return true;
     });
     Ui.crearTablaTambos(lista);
+    console.log(lista)
   }
 
   static cambiarPestañaControl() {
@@ -144,7 +142,9 @@ class Ui {
 
 function main() {
   Ui.eventos();
-  Ui.crearTablaTambos(manejoTambos.recolectarTambos);
+  const tambos = manejoTambos.recolectarTambos
+  Ui.crearTablaTambos(tambos);
+  Ui.crearListaTambos(tambos);
 }
 
 main();

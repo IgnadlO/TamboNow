@@ -2,8 +2,6 @@
 	width: 100%;
 	padding: 1% 0;
 	min-width: 500px;
-	min-height: 100px;
-	max-height: 55vh;
 	display: flex;
 	justify-content: space-evenly;
 }
@@ -22,17 +20,22 @@
 	text-align: center;
 }
 
-.fondo_verde { background: var(--cPrin); }
-.fondo_azul {background: #2980B9;}
+.fondo_verde {
+	background: var(--cPrin);
+}
+.fondo_azul {
+	background: #2980b9;
+}
 
-.tabla__info th{
+.tabla__info th {
 	color: #fdfefe;
 	padding: 15px;
 	border-bottom: 1px solid #d5bdbd;
 }
 
 .tabla__info td {
-	background: #E5E8E8;
+	background: #e5e8e8;
+	line-height: 130%;
 }
 
 #rcsProm { border-left: 1px solid #d5dbdb; }
@@ -41,19 +44,20 @@
 #vcsAporte { border-left: 1px solid #d5dbdb; }
 
 .leche { color: #a569bd; }
-.rp {background: #d5f5e3;}
-.tanque {background: #d5f5e3;}
 
+.rp { background: #d5f5e3; }
+
+.tanque { background: #d5f5e3; }
 
 .tabla__info {
 	border-collapse: collapse;
 	width: 40%;
-	height: 20vh;
+	min-height: 15vh;
 }
 
-.mes { 
-display: flex;
-flex-direction: column;
+.mes {
+	display: flex;
+	flex-direction: column;
 }
 
 .scoreAlto { color: #dc3545; }
