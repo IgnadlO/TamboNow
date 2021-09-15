@@ -57,15 +57,18 @@
 		</div>
 	</nav>
 <main>
-	<div class="contenedor">
+	<div id="contBotonNuevoControl">
+		<button id="botonNuevoControl" class="boton">Nuevo Control</button>
+	</div>
+	<div class="contenedor" id="tablaNuevoControl" style="display: none;">
 		<form class="contenedor__input" id="formControl">
 			<div class="input__fecha">
 				<label>Fecha del Control:</label>
 				<input type="date" id="fechaControl">
 			</div>
 			<label class="boton">
-			<input type="file" id="fileExcel" name="">
-			Subir Archivo
+				<input type="file" id="fileExcel" name="">
+				Subir Archivo
 			</label>
 		</form>
 		<div class="contenedor__boton">
@@ -101,7 +104,7 @@
 				<th>Rcs</th>
 				<th>Score</th>
 			</thead>
-        		<tbody>
+        		<tbody id="tbody">
         			<!-- <tr>
             			<td>1</td><td>6689</td><td>6</td><td>01/03/20</td><td>177</td><td>P</td><td>19,2</td><td>464</td><td>5,2</td>
         			</tr> -->

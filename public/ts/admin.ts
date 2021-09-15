@@ -4,7 +4,7 @@ const { ipcRenderer } = require("electron");
 import {datosPrin, datosSec, datosTambo, datosExcel} from '../../servet';
 
 let datosTambo: datosPrin[] = [];
-let datosTamboec: datosSec[] = [];
+let datosTamboSec: datosSec[] = [];
 let del: number[] = [];
 
 class UiC {
@@ -13,17 +13,41 @@ class UiC {
   private static botonCancelar = document.getElementById("cancelar")!;
   private static formControl = document.getElementById("formControl")! as HTMLFormElement;
   private static formFile = document.getElementById("fileExcel")!;
-  private static tabla = document.querySelector(".table")!;
+  private static tabla = document.getElementById("tbody")!;
+  private static tablaNuevoControl = document.getElementById("tablaNuevoControl")!;
 
   static main() {
     UiC.botonAceptar.addEventListener("click", UiC.subirControl);
     UiC.botonCancelar.addEventListener("click", UiC.borrarTabla);
     UiC.formFile.addEventListener("change", UiC.cargarTablaExcel, false);
+    UiC.bajarDatosControl();
+    document.getElementById('botonNuevoControl')!
+    .addEventListener('click', UiC.cambiarEstadoTablaNuevoControl)
+  }
+
+  static bajarDatosControl(){
+    const datosPrin = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
+    const datosSec = ipcRenderer.sendSync("conParametros", "verControlSecundario", UiC.tamboActivo.id);
+    console.log(datosPrin);
+    console.log(datosSec);
+    UiC.crearTablaControl(datosPrin, datosSec);
+  }
+
+  static cambiarEstadoTablaNuevoControl() {
+    const boton = document.getElementById('contBotonNuevoControl')!;
+  
+    if (UiC.tablaNuevoControl.style.display != 'none'){
+      UiC.tablaNuevoControl.style.display = 'none';
+      boton.style.display = 'block'; 
+    }
+    else {
+      UiC.tablaNuevoControl.style.display = 'flex';
+      boton.style.display = 'none';
+    }
   }
 
   static borrarTabla() {
-    if (UiC.tabla.children.length >= 2)
-      UiC.tabla.removeChild(UiC.tabla.lastElementChild!);
+    UiC.tabla.innerHTML = '';
     for (let i in datosTambo) datosTambo.pop();
     UiC.formControl.reset();
   }
@@ -63,7 +87,7 @@ class UiC {
           tambo: UiC.tamboActivo.id,
         });
         const esNull = datos[i].Leche == undefined || datos[i].Rcs == undefined? true: false;
-        datosTamboec.push({
+        datosTamboSec.push({
           leche: esNull ? null : datos[i].Leche,
           rcs: esNull ? null : datos[i].Rcs,
           totalCs: esNull ? null : datos[i].Leche * datos[i].Rcs,
@@ -72,17 +96,17 @@ class UiC {
           fecha: fechaControl,
           idVaca: i,
         });
-        sumaCs += esNull ? 0 : datosTamboec[i].totalCs!;
+        sumaCs += esNull ? 0 : datosTamboSec[i].totalCs!;
       }
-      for (let dato of datosTamboec)
+      for (let dato of datosTamboSec)
         dato.tanque = dato.totalCs == null ? 0 : (dato.totalCs / sumaCs) * 100!;
-      UiC.crearTablaControl(datosTambo, datosTamboec);
+      UiC.crearTablaControl(datosTambo, datosTamboSec);
     };
     reader.readAsArrayBuffer(f);
   }
 
   static crearTablaControl(datos, datosSec) {
-    const tbody = document.createElement("tbody");
+    UiC.tabla.innerHTML = '';
     const vaciarDato = (dato) => (dato == null ? "" : dato);
     for (let i = 0; i <= datos.length - 1; i++) {
       const item = document.createElement("tr");
@@ -96,12 +120,16 @@ class UiC {
       item.innerHTML = `<td scope="row">${i}</td>`;
       for (let sub of ["rp", "lactancia", "parto", "del", "tacto"])
         item.appendChild(crearCampo(datos[i][sub], i, sub));
-      for (let sub of ["leche", "rcs", "score"])
-        item.appendChild(crearCampo(datosSec[i][sub], i, sub));
-      tbody.appendChild(item);
+      for (let sub of ["leche", "rcs", "score"]) {
+        if (datosSec[i] == undefined)
+           item.appendChild(crearCampo(null, i, sub));
+        else
+           item.appendChild(crearCampo(datosSec[i][sub], i, sub));
+      }
+      UiC.tabla.appendChild(item);
     }
-    UiC.tabla.appendChild(tbody);
   }
+
   //(e.target.id[0] == 's')? 'text': 'number'
   static editarCampo(e) {
     const input = document.createElement("td");
@@ -163,7 +191,18 @@ class UiC {
       return 0;
     }
     console.log(datosTambo);
+    console.log(datosTamboSec);
     ipcRenderer.sendSync("conParametros", "nuevoControlPrincipal", datosTambo);
+    const vacas = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
+    for (let i in vacas){
+      datosTambo.forEach((val,index) => {
+        if(val.rp == vacas[i].rp){
+          datosTamboSec[index].idVaca = vacas[i].idVaca;
+          return 0;
+        }
+      })
+    }
+    ipcRenderer.sendSync("conParametros", "subirControlSecundario", datosTamboSec);
   }
 }
 

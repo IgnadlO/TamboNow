@@ -36,6 +36,18 @@ label {
     transition: all 0.2s ease-out;
 }
 
+.rojo {
+    border-color: #dc3545;
+    color: #dc3545;
+    margin-left: 5px;
+    height: 100%;
+}
+
+.rojo:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
 .input{
     font-size: 20px;
     /*width: 87%;*/

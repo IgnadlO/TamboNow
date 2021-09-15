@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as sqlite3 from "sqlite3";
-import { datosPrin } from '../servet'
+import { datosPrin, datosSec } from '../servet'
 sqlite3.verbose();
 
 export default class Conexion {
@@ -72,16 +72,40 @@ export default class Conexion {
 					[dato.rp,dato.lactancia,dato.parto,dato.del,dato.tacto,dato.tambo],
 					err => {
 					if(err) rej(err);
-					console.log(err)
 				})
 			}
 			res(true);
 		})
 	}
 
+	private static subirControlSecundario(datos: datosSec[]){
+		return new Promise((res, rej) => {
+			for (let dato of datos){
+				Conexion.db.run('INSERT INTO datosSecundarios(leche,rcs,totalCs,tanque,score,fecha,idVaca) VALUES(?,?,?,?,?,?,?)', 
+					[dato.leche,dato.rcs,dato.totalCs,dato.tanque,dato.score,dato.fecha,dato.idVaca],
+					err => {
+					if(err) rej(err);
+				})
+			}
+			res(true);
+		})
+	}
+
+
 	private static verControlPrincipal(tambo: number){
 		return new Promise((res, rej) => {
-			Conexion.db.all("SELECT * FROM datosPrincipales", (err, result) => {
+			Conexion.db.all("SELECT * FROM datosPrincipales WHERE tambo = ?", tambo, (err, result) => {
+				if (err) {
+					console.log(err);
+					rej(err);
+				} else res(result);
+			});
+		});
+	}
+
+	private static verControlSecundario(tambo: number){
+		return new Promise((res, rej) => {
+			Conexion.db.all("select A.leche,A.rcs,A.totalCs,A.tanque,A.score,A.fecha,A.idVaca from datosSecundarios A inner join datosPrincipales B on A.idVaca=B.idVaca where B.tambo = 1", (err, result) => {
 				if (err) {
 					console.log(err);
 					rej(err);

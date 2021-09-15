@@ -56,25 +56,30 @@ class Ui {
   }
 
   static borrarTamboValidar(e) {
-    Ui.tamboSeleccionado = JSON.parse(e.target.id);
+    const id = (e.target.id == '')? e.target.parentNode.id: e.target.id;
+    console.log(id)
+    Ui.tamboSeleccionado = JSON.parse(id);
     Ui.cuadroValidacion = document.createElement("div");
     Ui.cuadroValidacion.id = "validacion";
     Ui.cuadroValidacion.innerHTML = `
     <h3>Confirmacion</h3>
     <label>Esta seguro de que quiere eliminar el tambo ${Ui.tamboSeleccionado.nombre}?</label>
+    <br>
     `;
     const elementoChild = document.createElement("div");
     elementoChild.appendChild(Ui.crearBotones("aceptar"));
     elementoChild.appendChild(Ui.crearBotones("cancelar"));
     Ui.cuadroValidacion.appendChild(elementoChild);
-    const contenedor = document.getElementById("contenedor")!;
+    const contenedor = document.getElementById("contenedor__alerta")!;
+    contenedor.innerHTML = '';
     contenedor.appendChild(Ui.cuadroValidacion);
   }
 
   static crearBotones(texto: string) {
     const boton = document.createElement("button");
     boton.innerHTML = texto;
-    boton.classList.add(texto);
+    const tipo = (texto == 'cancelar')? 'rojo' : 'Holanda';
+    boton.classList.add(texto,'boton',tipo);
     boton.addEventListener("click", Ui.borrarTamboBotones);
     return boton;
   }
@@ -87,7 +92,7 @@ class Ui {
       Ui.crearTablaTambos(tambos);
       Ui.crearListaTambos(tambos);
     }
-    document.getElementById("contenedor")!.removeChild(Ui.cuadroValidacion);
+    document.getElementById("contenedor__alerta")!.removeChild(Ui.cuadroValidacion);
   }
 
   static crearTablaTambos(lista) {
@@ -105,7 +110,7 @@ class Ui {
     for (let i = 0; i <= lista.length - 1; i++) {
       const registro = document.createElement("tr");
       crearTd(lista[i].nombre, 'presionoUnTambo', registro, lista[i].nombre);
-      crearTd(`<buttom id='${JSON.stringify(lista[i])}' class="borrar"> X </buttom>`, 'borrarTamboValidar', registro)
+      crearTd(`<buttom class="borrar"> X </buttom>`, 'borrarTamboValidar', registro, JSON.stringify(lista[i]) )
       tbody.appendChild(registro);
     }
     tabla.appendChild(tbody);
