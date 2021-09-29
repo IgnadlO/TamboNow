@@ -71,6 +71,24 @@
 				Subir Archivo
 			</label>
 		</form>
+		<div class="contenedor__datos">
+			<div>
+				<label>Nuevas</label>
+				<label id="vacasNuevas"></label>
+			</div>
+			<div>
+				<label>Se Mantienen</label>
+				<label id="vacasActualizadas"></label>
+			</div>
+			<div>
+				<label>Eliminadas</label>
+				<label id="vacasEliminadas"></label>
+			</div>
+			<div>
+				<label>Total</label>
+				<label id="vacasTotal"></label>
+			</div>
+		</div>
 		<div class="contenedor__boton">
 			<div class="botones">
 				<button class="boton" id="aceptar">Aceptar</button>
@@ -79,6 +97,9 @@
 			<button class="boton rojo" id="cancelar">X</button>
 		</div>
 	</div>
+	<div class="contenedor__buscador">
+			<input type="text" id="buscador" placeholder="Buscar Por Rp">
+		</div>
 	<div>
 		<!-- <div class="thead">
 			<label class="tabla__titulo">N°</label>

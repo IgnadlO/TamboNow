@@ -218,8 +218,6 @@ label {
 
 .table th,td{ padding: 20px; }
 
-.table td:hover {background-color: #eee;}
-
 .table th{
     color: var(--cPrin);
     border-bottom: 1px solid var(--cPrin);

@@ -10,7 +10,7 @@
 <ul class="header__lista">
     <li class="header__item" style="width: 15em;">
     	<div class="header__Tambo">
-    		<a class="header__dr" style="padding-left: 15px;" href="/">San Bernardo</a>
+    		<a class="header__dr" id='tamboActivo' style="padding-left: 15px;" href="#"></a>
     	</div>
     </li>
     <li class="header__flex">
@@ -65,20 +65,20 @@
 			SCORE  SUPERIOR  A  4  ( RCS  SUPERIORES  A  200.000)  EN  VACAS.
 			</label>
 			<select class="input" id="tipo">
-            		<option value="nashe" selected="select" id="nada">Vaquillonas</option>
-            		<option value="3"id="usuario" >Vacas</option>
+            		<option selected="select" id="false">Vaquillonas</option>
+            		<option id="true" >Vacas</option>
             	</select>
             </div>
 			<div class="contenedor__derecha">
 				<div class="contenedor__fecha">
-					<label>Fecha del Control Lechero</label>
-					<label>04/03/21</label>
+					<label>Fecha del Control</label>
+					<label id="fechaControl"></label>
 				</div>
 			</div>
 		</div>
 		<div class="contenedor__tabla scroll">
-        	<table class="table">
-        	<thead>
+        	<table class="table" id="tabla">
+        	<thead id="thead">
 				<th>N°</th>
 				<th>RP</th>
 				<th>Lact.</th>
@@ -94,7 +94,7 @@
 				<th>ACP</th>
 				<th>Accionar</th>
 			</thead>
-        		<tbody>
+        		<tbody id="tbody">
         			<tr>
             			<td>1</td><td class="rp">6689</td><td>2</td><td>01/03/20</td><td>177</td><td>P</td><td>0,2</td><td>3,3</td><td class="scoreAlto">4,2</td><td class="leche">23,6</td><td class="tanque">4,31%</td><td class="scoreAlto">7,0</td><td>4</td><td><select><option>        </option><option>Secar</option><option>Tratar</option><option>Muestrear</option><option>Anular</option><option>Segregar</option></select></td>
         			</tr>
@@ -111,5 +111,6 @@
     		</table>    
 		</div>
 	</main>
+	<script type="module" src="../js/cronicas.js"></script>
 </body>
 </html>

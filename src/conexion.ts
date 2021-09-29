@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as sqlite3 from "sqlite3";
-import { datosPrin, datosSec } from '../servet'
+import { datosPrin, datosSec, tipoControlSubir } from '../servet'
 sqlite3.verbose();
 
 export default class Conexion {
@@ -65,15 +65,36 @@ export default class Conexion {
 		});
 	}
 
-	private static nuevoControlPrincipal(datos: datosPrin[]){
+	private static subirControlPrincipal(datos: tipoControlSubir){
 		return new Promise((res, rej) => {
-			for (let dato of datos){
+			for (let dato of datos.nv){
 				Conexion.db.run('INSERT INTO datosPrincipales(rp,lactancia,parto,del,tacto,tambo) VALUES(?,?,?,?,?,?)', 
 					[dato.rp,dato.lactancia,dato.parto,dato.del,dato.tacto,dato.tambo],
 					err => {
 					if(err) rej(err);
 				})
 			}
+			for (let dato of datos.ac){
+				Conexion.db.run('UPDATE datosPrincipales SET lactancia = ? parto = ?, del = ?, tacto = ? WHERE rp = ? AND tambo = ?', 
+					[dato.lactancia,dato.parto,dato.del,dato.tacto,dato.rp,dato.tambo],
+					err => {
+					if(err) rej(err);
+				})
+			}
+			for (let dato of datos.br){
+				Conexion.db.run('DELETE FROM datosPrincipales WHERE idVaca = ?', 
+					dato,
+					err => {
+					if(err) rej(err);
+					else {
+						Conexion.db.run('DELETE FROM datosSecundarios WHERE idVaca = ?', 
+						dato,
+						err => {
+						if(err) rej(err);
+						})
+					}
+				})
+			}	
 			res(true);
 		})
 	}
@@ -91,7 +112,6 @@ export default class Conexion {
 		})
 	}
 
-
 	private static verControlPrincipal(tambo: number){
 		return new Promise((res, rej) => {
 			Conexion.db.all("SELECT * FROM datosPrincipales WHERE tambo = ?", tambo, (err, result) => {
@@ -105,7 +125,7 @@ export default class Conexion {
 
 	private static verControlSecundario(tambo: number){
 		return new Promise((res, rej) => {
-			Conexion.db.all("select A.leche,A.rcs,A.totalCs,A.tanque,A.score,A.fecha,A.idVaca from datosSecundarios A inner join datosPrincipales B on A.idVaca=B.idVaca where B.tambo = 1", (err, result) => {
+			Conexion.db.all("select A.leche,A.rcs,A.totalCs,A.tanque,A.score,A.fecha,A.idVaca from datosSecundarios A inner join datosPrincipales B on A.idVaca=B.idVaca where B.tambo = ?", tambo, (err, result) => {
 				if (err) {
 					console.log(err);
 					rej(err);

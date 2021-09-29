@@ -27,7 +27,19 @@ export type datosSec = {
   idVaca: number;
 };
 
+export type datosIndex = {
+  rp: number;
+  id: number;
+}
+
 export type datosTambo = {
   id: number;
   nombre: string;
 };
+
+export type tipoControlSubir = {
+  nv: datosPrin[];
+  ac: datosPrin[];
+  br: number[]; 
+  tambo: number;
+}

@@ -1,10 +1,11 @@
 const xlsx = require("xlsx");
 const path = require("path");
 const { ipcRenderer } = require("electron");
-import {datosPrin, datosSec, datosTambo, datosExcel} from '../../servet';
+import {datosPrin, datosSec, datosTambo, datosExcel, datosIndex} from '../../servet';
 
 let datosTambo: datosPrin[] = [];
 let datosTamboSec: datosSec[] = [];
+const datoIndex: datosIndex[] = [];
 let del: number[] = [];
 
 class UiC {
@@ -23,6 +24,39 @@ class UiC {
     UiC.bajarDatosControl();
     document.getElementById('botonNuevoControl')!
     .addEventListener('click', UiC.cambiarEstadoTablaNuevoControl)
+    document.getElementById('cancelar')!
+    .addEventListener('click', UiC.cambiarEstadoTablaNuevoControl)
+    document.getElementById('buscador')!
+    .addEventListener('keyup', UiC.buscador)
+  }
+
+  static buscador(e){
+    const valor = e.target.value;
+    const datosBuscados: datosPrin[] = [];
+    const datosSecBuscados: datosSec[] = [];
+
+    const buscar = (dT, dS) => {
+      dT.forEach((val, i) => {
+        if (val.rp.toString().includes(valor)) {
+          datosBuscados.push(val);
+          for (let vaca of dS) {
+            if (vaca.idVaca == val.idVaca) {
+              datosSecBuscados.push(vaca);
+              break;
+            }
+          }
+        }
+      });
+      UiC.crearTablaControl(datosBuscados, datosSecBuscados);
+    };
+
+    if (datosTambo.length == 0) {
+      const datosPrin = ipcRenderer.sendSync("conParametros","verControlPrincipal",UiC.tamboActivo.id);
+      const datosSec = ipcRenderer.sendSync("conParametros","verControlSecundario",UiC.tamboActivo.id);
+      buscar(datosPrin, datosSec);
+    } else buscar(datosTambo, datosTamboSec);
+
+    //datosBuscados.push()
   }
 
   static bajarDatosControl(){
@@ -38,11 +72,14 @@ class UiC {
   
     if (UiC.tablaNuevoControl.style.display != 'none'){
       UiC.tablaNuevoControl.style.display = 'none';
-      boton.style.display = 'block'; 
+      boton.style.display = 'block';
+      UiC.borrarTabla();
+      UiC.bajarDatosControl();
     }
     else {
       UiC.tablaNuevoControl.style.display = 'flex';
       boton.style.display = 'none';
+      UiC.borrarTabla();
     }
   }
 
@@ -87,6 +124,10 @@ class UiC {
           tambo: UiC.tamboActivo.id,
         });
         const esNull = datos[i].Leche == undefined || datos[i].Rcs == undefined? true: false;
+        datoIndex.push({
+          rp: datos[i].Rp,
+          id: i,
+        });
         datosTamboSec.push({
           leche: esNull ? null : datos[i].Leche,
           rcs: esNull ? null : datos[i].Rcs,
@@ -100,9 +141,19 @@ class UiC {
       }
       for (let dato of datosTamboSec)
         dato.tanque = dato.totalCs == null ? 0 : (dato.totalCs / sumaCs) * 100!;
+      UiC.mostrarDatosControl(datosTambo)
       UiC.crearTablaControl(datosTambo, datosTamboSec);
     };
     reader.readAsArrayBuffer(f);
+  }
+
+  static mostrarDatosControl(datos){
+    const comparacion = UiC.compararControlPrin(datos);
+    const total = comparacion[0] + comparacion[1];
+    document.getElementById('vacasNuevas')!.innerText = comparacion[0].toString();
+    document.getElementById('vacasActualizadas')!.innerText = comparacion[1].toString();
+    document.getElementById('vacasEliminadas')!.innerText = comparacion[2].toString();
+    document.getElementById('vacasTotal')!.innerText = total.toString();
   }
 
   static crearTablaControl(datos, datosSec) {
@@ -183,6 +234,32 @@ class UiC {
     elemento.innerText = UiC.tamboActivo.nombre;
   }
 
+  static compararControlPrin(datosNuevos: datosPrin[]){
+    const datosActuales = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
+    let eliminadas = 0, nuevas = 0, actualizadas = 0;
+    datosActuales.forEach(val => {
+      let existe = false;
+      for (let vaca of datosNuevos){
+        if(vaca.rp == val.rp)
+         existe = true;
+      }
+      if(!existe) eliminadas++;
+    });
+    datosNuevos.forEach(val => {
+      let existe = false;
+      for (let vaca of datosActuales){
+        if(vaca.rp == val.rp){
+          existe = true;
+          actualizadas++;
+        }
+      }
+      if(!existe){
+        nuevas++;
+      }
+    });
+    return [nuevas, actualizadas, eliminadas];
+  }
+
   static subirControl(e) {
     const elemento = document.getElementById("fechaControl")! as HTMLInputElement;
     const fechaControl = elemento.value;
@@ -190,20 +267,50 @@ class UiC {
       console.log("falta informacion");
       return 0;
     }
-    console.log(datosTambo);
-    console.log(datosTamboSec);
-    ipcRenderer.sendSync("conParametros", "nuevoControlPrincipal", datosTambo);
-    const vacas = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
-    for (let i in vacas){
-      datosTambo.forEach((val,index) => {
-        if(val.rp == vacas[i].rp){
-          datosTamboSec[index].idVaca = vacas[i].idVaca;
-          return 0;
+    let datosActuales = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
+    const vacasNuevas: datosPrin[] = [], vacasActualizar: datosPrin[] = [], vacasEliminadas: number[] = [];
+    console.log(datosActuales)
+
+    datosActuales.forEach(val => {
+      let existe = false;
+      for (let vaca of datosTambo)
+        if(vaca.rp == val.rp) existe = true;  
+      if(!existe) vacasEliminadas.push(val.rp);
+    });
+
+    datosTambo.forEach(val => {
+      let existe = false;
+      for (let vaca of datosActuales){
+        if(vaca.rp == val.rp){
+          existe = true;
+          vacasActualizar.push(val);
         }
-      })
-    }
+      }
+      if(!existe) vacasNuevas.push(val);
+    });
+
+    console.log('datos nuevos');
+    const subir = {
+      nv: vacasNuevas, 
+      ac: vacasActualizar, 
+      br: vacasEliminadas, 
+      tambo: UiC.tamboActivo.id
+    };
+    ipcRenderer.sendSync("conParametros", "subirControlPrincipal", subir);
+
+    datosActuales = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);
+    console.log(datoIndex);
+    datoIndex.forEach(val => {
+      for (let vaca of datosActuales){
+        if(val.rp == vaca.rp)
+          datosTamboSec[val.id].idVaca = vaca.idVaca;
+      }
+    })
+
+    console.log('datosTamboSec')
     ipcRenderer.sendSync("conParametros", "subirControlSecundario", datosTamboSec);
   }
+
 }
 
 function main(){
