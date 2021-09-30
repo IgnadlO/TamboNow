@@ -32,6 +32,9 @@ input[type="text"] {
 
 tr { cursor: pointer; }
 
+
+
+/*___________________________________ CONFIRMACION _______________________________*/
 #validacion {
 	border-radius: 20px;
 	background-color: #F33D3D;
@@ -64,12 +67,24 @@ tr { cursor: pointer; }
 	justify-content: space-around;
 	padding-top: 50px; 
 }
-.boton{
-
-}
 
 .rojo {
 	color: white;
 	background-color: #F33D3D;
 	border-color: #F33D3D;
+}
+.rojo:hover {
+	background-color: white;
+	border-color: white;
+	color: #F33D3D;
+}
+.Holanda {
+	color: white;
+	background-color: #F33D3D;
+	border-color: #F33D3D;
+}
+.Holanda:hover {
+	background-color: white;
+	border-color: white;
+	color: green;
 }
