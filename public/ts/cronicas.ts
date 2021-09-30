@@ -4,14 +4,17 @@ import { datosTambo, datosPrin, datosSec } from '../../servet';
 let tamboActivo: datosTambo = ipcRenderer.sendSync("verTamboActivo");
 let datosTambo: datosPrin[] = ipcRenderer.sendSync("conParametros", "verControlPrincipal", tamboActivo.id);
 let datosTamboSec: datosSec[] = ipcRenderer.sendSync("conParametros", "verControlSecundario", tamboActivo.id);
+type tFechas = datosSec[];
 
 class Ui {
 	private static esVaca = false;
 	private static tbody = document.getElementById('tbody')!;
 	private static selectorTipo = document.getElementById('tipo')!;
+	private static ultimoOrd = {tipo: '', orden: true};
 
 	static main(){
-		Ui.crearTabla()
+		Ui.crearEncabezadoTabla();
+		Ui.crearTabla(datosTambo, datosTamboSec)
 		Ui.mostrarTamboActivo()
 		Ui.selectorTipo.addEventListener('change', Ui.cambiarTipoTabla)
 		console.log(datosTamboSec)
@@ -20,18 +23,14 @@ class Ui {
 
 	static cambiarTipoTabla(e){
 		Ui.esVaca = (e.target.options.selectedIndex == 0)? false: true;
-		Ui.crearTabla()
+		Ui.crearTabla(datosTambo, datosTamboSec);
 	}
 
-	static crearTabla(){
-		Ui.tbody.innerHTML = '';
-		const limite = (Ui.esVaca)? 4 : 3;
-
-		type tFechas = datosSec[];
+	static separarPorFecha(datosSec: datosSec[]): [string[], string[], tFechas[]]{
 		const fechas: string[] = [];
 		const datosSecFechas: tFechas[] = [];
 
-		for(let vaca of datosTamboSec){
+		for(let vaca of datosSec){
 			if (!fechas.includes(vaca.fecha)){
 				fechas.push(vaca.fecha);
 				datosSecFechas.push(new Array());	
@@ -62,6 +61,13 @@ class Ui {
 		console.log(fechas)
 		console.log(datosSecFechas)
 
+		return [meses, fechas, datosSecFechas]
+	}
+
+	static crearEncabezadoTabla(){
+		const [ meses, fechas, datosSecFechas ] = Ui.separarPorFecha(datosTamboSec);
+
+		const limite = (Ui.esVaca)? 4 : 3;
 		let scores = '';
 		for(let i = meses.length - 1; i > 0; i--){
 			if (i >= 5) break;
@@ -83,11 +89,20 @@ class Ui {
 				<th id="acp">ACP</th>
 				<th>Accionar</th>`;
 		thead.id = 'thead';
-		document.getElementById('tabla')!.replaceChild(thead, document.getElementById('thead')!)
+		if(document.getElementById('thead'))
+			document.getElementById('tabla')!.replaceChild(thead, document.getElementById('thead')!);
+		else
+			document.getElementById('tabla')!.appendChild(thead);
+	}
 
+	static crearTabla(datosPrin, datosSec){
+		Ui.tbody.innerHTML = '';
+		const limite = (Ui.esVaca)? 4 : 3;
 		let i = -1;
 
-		for (let vaca of datosTambo){
+		const [ meses, fechas, datosSecFechas ] = Ui.separarPorFecha(datosSec);
+
+		for (let vaca of datosPrin){
 			i++;
 			const scoreActual: number | null = (datosSecFechas[0][i].score == null)? 0 : datosSecFechas[0][i].score;
 			if (scoreActual == null) continue;
@@ -98,7 +113,14 @@ class Ui {
 			const tr = document.createElement('tr');
 			const num = num => (num == null || num == '')? '' : num.toFixed(2);	
 			const scoreT = val => (val != null && val >= limite)? 'scoreAlto': '';
-			scores = '';
+			let acp = 0;
+			for(let val of datosSecFechas) {
+			const score: number | null = (val[i].score == null)? 0 : val[i].score;
+			if (score == null) continue;
+				if(score > limite)
+					acp++;
+			}
+			let scores = '';
 			for (let iF = fechas.length - 1; iF > 0; iF--) {
 				if (iF >= 5) break;
 				scores += `<td class="${scoreT(datosSecFechas[iF][i].score)}">${num(datosSecFechas[iF][i].score)}</td>`;
@@ -114,7 +136,7 @@ class Ui {
 			<td class="leche">${num(datosSecFechas[0][i].leche)}</td>
 			<td class="tanque">${num(datosSecFechas[0][i].tanque)}%</td>
 			<td class="${scoreT(datosSecFechas[0][i].score)}">${num(datosSecFechas[0][i].score)}</td>
-			<td>4</td>
+			<td class="acp${acp}">${acp}</td>
 			<td>
 				<select>
 					<option>        </option>
@@ -139,8 +161,41 @@ class Ui {
 	}
 
 	static ordenamientoTabla(e){
+		const valor = e.target.id;
 		console.log(e.target.id)
+		if(Ui.ultimoOrd.tipo == valor) Ui.ultimoOrd.orden = !Ui.ultimoOrd.orden;
+		else {
+			Ui.ultimoOrd.tipo = valor;
+			Ui.ultimoOrd.orden = true;
+		}
+		console.log(Ui.ultimoOrd)
+		const ord = datosTambo.slice();
+		ord.sort(function(a, b){
+        if (Ui.ultimoOrd.orden && a[valor] > b[valor])
+         return -1;
+        else if (!Ui.ultimoOrd.orden && a[valor] < b[valor])
+        	return -1;
+     	return 1
+        });
+        console.log(ord)
+        const datosSecOrdenados = Ui.ordenarArrays(ord, datosTamboSec)
+        Ui.crearTabla(ord, datosSecOrdenados);
+	}
 
+	static ordenarArrays(datosPrin: datosPrin[], datosSec: datosSec[]){
+		const nuevoArray: datosSec[] = [];
+		const viejoArray: datosSec[] = datosSec.slice();
+		datosPrin.forEach(val => {
+			for (let i = 0; i < viejoArray.length; i++){
+				console.log(viejoArray[i].idVaca + ' ' + val.idVaca)
+				if(val.idVaca == viejoArray[i].idVaca){
+					nuevoArray.push(viejoArray.splice(i, 1)[0]);
+				}
+			}
+			console.log(viejoArray)
+		})
+		console.log('length de array es ' + nuevoArray.length)
+		return nuevoArray;	
 	}
 
 	static mostrarTamboActivo(){

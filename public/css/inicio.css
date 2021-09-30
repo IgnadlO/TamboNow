@@ -31,3 +31,45 @@ input[type="text"] {
 }
 
 tr { cursor: pointer; }
+
+#validacion {
+	border-radius: 20px;
+	background-color: #F33D3D;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	height: 200px;
+	margin: auto;
+	width: 50%;
+	border: 1px solid red;
+	padding: 20px;
+}
+
+#validacion h3{
+	margin: 0;
+	font-size: 3em;
+	color: white;
+	text-align: center;
+}
+#validacion label{
+	color: white;
+	text-align: center;
+	padding-top: 20px; 
+}
+
+#validacion div{
+	display: flex;
+	justify-content: space-around;
+	padding-top: 50px; 
+}
+.boton{
+
+}
+
+.rojo {
+	color: white;
+	background-color: #F33D3D;
+	border-color: #F33D3D;
+}

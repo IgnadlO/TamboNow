@@ -18,6 +18,7 @@ class manejoTambos {
     const elemento = document.getElementById("nombreTambo") as HTMLInputElement;
     const nombre = elemento.value;
     if (manejoTambos.tambosNombre.includes(nombre)) console.log("ya existe");
+    else if (nombre == '') console.log('esta vacio');
     else {
       const send = ipcRenderer.sendSync("conParametros", "crearTambo", nombre);
       ipcRenderer.sendSync("nuevoTamboActivo", send[0]);
@@ -57,6 +58,7 @@ class Ui {
 
   static borrarTamboValidar(e) {
     const id = (e.target.id == '')? e.target.parentNode.id: e.target.id;
+    if (JSON.parse(id).nombre == 'cacho') return 0;
     console.log(id)
     Ui.tamboSeleccionado = JSON.parse(id);
     Ui.cuadroValidacion = document.createElement("div");

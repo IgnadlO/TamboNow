@@ -15,6 +15,7 @@ export type datosPrin = {
   del: number;
   tacto: string | null;
   tambo: number;
+  idVaca: number;
 };
 
 export type datosSec = {

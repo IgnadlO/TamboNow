@@ -116,6 +116,7 @@ class UiC {
       for (let i = 0; i <= datos.length - 1; i++) {
         const fecha = UiC.formatearfechaExcel(datos[i].Fecha);
         datosTambo.push({
+          idVaca: i,
           rp: datos[i].Rp,
           lactancia: datos[i].Lactancia,
           parto: fecha.fechaBien,
@@ -147,7 +148,7 @@ class UiC {
     reader.readAsArrayBuffer(f);
   }
 
-  static mostrarDatosControl(datos){
+  static mostrarDatosControl(datos) {
     const comparacion = UiC.compararControlPrin(datos);
     const total = comparacion[0] + comparacion[1];
     document.getElementById('vacasNuevas')!.innerText = comparacion[0].toString();
@@ -309,8 +310,9 @@ class UiC {
 
     console.log('datosTamboSec')
     ipcRenderer.sendSync("conParametros", "subirControlSecundario", datosTamboSec);
-  }
 
+    UiC.cambiarEstadoTablaNuevoControl();
+  }
 }
 
 function main(){
