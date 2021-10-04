@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "strict": true,
-    "outDir": "dist",
+    "outDir": "main",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,

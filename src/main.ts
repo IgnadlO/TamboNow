@@ -10,6 +10,7 @@ export default class Main {
     Main.mainWindow = new BrowserWindow({ 
         height: 768, 
         width: 800,
+        icon: path.join(__dirname , '..' , 'public', 'img', 'Daco_4003289.png'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false

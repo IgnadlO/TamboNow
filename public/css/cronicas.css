@@ -13,6 +13,11 @@
 	width: 180px;
 }
 
+.mes {
+	display: flex;
+	flex-direction: column;
+}
+
 .contenedor__fecha {
 	display: flex;
 	flex-direction: column;
@@ -34,8 +39,9 @@
 	background: #ff9c9c;
 }
 
-.acp1 { background: #F0F09D } 
-.acp2 { background: #F3F38B }
-.acp3 { background: #F0F049 }
-.acp4 { background: #F0F03B }
-.acp5 { background: #F3F329 }
+.acp1 { background: rgba(255, 255, 204);} 
+.acp2 { background: rgba(255, 255, 153);}
+.acp3 { background: rgba(255, 255, 102); }
+.acp4 { background: rgba(255, 255, 50); }
+.acp5 { background: rgba(255, 255, 0); }
+

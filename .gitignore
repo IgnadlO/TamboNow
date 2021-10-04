@@ -1,3 +1,7 @@
+#cosas
+package-lock.json
+main/
+
 # Logs
 logs
 *.log
@@ -76,3 +80,4 @@ public/js/
 
 # FuseBox cache
 .fusebox/
+

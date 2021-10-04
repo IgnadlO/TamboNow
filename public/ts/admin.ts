@@ -130,11 +130,11 @@ class UiC {
           id: i,
         });
         datosTamboSec.push({
-          leche: esNull ? null : datos[i].Leche,
-          rcs: esNull ? null : datos[i].Rcs,
+          leche: esNull ? 0 : datos[i].Leche,
+          rcs: esNull ? 0 : datos[i].Rcs,
           totalCs: esNull ? null : datos[i].Leche * datos[i].Rcs,
           tanque: 0,
-          score: esNull ? null : datos[i].Rcs / 100 / 2 + 3,
+          score: esNull ? null : Math.log((datos[i].Rcs / 100)) / Math.log(2) + 3,
           fecha: fechaControl,
           idVaca: i,
         });
@@ -169,7 +169,7 @@ class UiC {
         campo.addEventListener("click", UiC.editarCampo);
         return campo;
       };
-      item.innerHTML = `<td scope="row">${i}</td>`;
+      item.innerHTML = `<td scope="row">${i + 1}</td>`;
       for (let sub of ["rp", "lactancia", "parto", "del", "tacto"])
         item.appendChild(crearCampo(datos[i][sub], i, sub));
       for (let sub of ["leche", "rcs", "score"]) {
@@ -276,7 +276,7 @@ class UiC {
       let existe = false;
       for (let vaca of datosTambo)
         if(vaca.rp == val.rp) existe = true;  
-      if(!existe) vacasEliminadas.push(val.rp);
+      if(!existe) vacasEliminadas.push(val.idVaca);
     });
 
     datosTambo.forEach(val => {
@@ -297,6 +297,7 @@ class UiC {
       br: vacasEliminadas, 
       tambo: UiC.tamboActivo.id
     };
+    console.log(subir)
     ipcRenderer.sendSync("conParametros", "subirControlPrincipal", subir);
 
     datosActuales = ipcRenderer.sendSync("conParametros", "verControlPrincipal", UiC.tamboActivo.id);

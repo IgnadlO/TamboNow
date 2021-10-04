@@ -19,6 +19,11 @@ class manejoTambos {
     const nombre = elemento.value;
     if (manejoTambos.tambosNombre.includes(nombre)) console.log("ya existe");
     else if (nombre == '') console.log('esta vacio');
+    else if (nombre == 'limpiarDB') {
+      ipcRenderer.sendSync("sinParametros", "limpiarDB");
+      console.log('se limpio la base de datos');
+      elemento.value = '';
+    }
     else {
       const send = ipcRenderer.sendSync("conParametros", "crearTambo", nombre);
       ipcRenderer.sendSync("nuevoTamboActivo", send[0]);
@@ -119,6 +124,7 @@ class Ui {
   }
 
   static crearListaTambos(lista) {
+    Ui.listaTambos.innerHTML = '';
     for (let dato of lista) {
       Ui.listaTambos.insertAdjacentHTML("beforeend",`
           <div class="menu__opcion" id="${dato.nombre}">

@@ -8,6 +8,20 @@ export type datosExcel = {
   Rcs: number;
 };
 
+export type datosUni = {
+  idVaca: number;
+  rp: number;
+  lactancia: number;
+  parto: string;
+  del: number;
+  tacto: string | null;
+  scoresOld: number[];
+  leche: number;
+  rcs: number;
+  tanque: number;
+  score: number | null;
+};
+
 export type datosPrin = {
   rp: number;
   lactancia: number;
@@ -19,8 +33,8 @@ export type datosPrin = {
 };
 
 export type datosSec = {
-  leche: number | null;
-  rcs: number | null;
+  leche: number;
+  rcs: number;
   totalCs: number | null;
   tanque: number;
   score: number | null;

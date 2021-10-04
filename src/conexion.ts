@@ -5,11 +5,24 @@ sqlite3.verbose();
 
 export default class Conexion {
 	private static rutas: object;
-	private static dbPath = path.resolve(__dirname, "../Docs/database.db");
+	private static dbPath = `${__dirname}/../schema/database.db`;
 	private static db = new sqlite3.Database(Conexion.dbPath);
 
 	static ruta(funcion: string, arg: any) {
 		return Conexion[funcion](arg);
+	}
+
+	private static limpiarDB() { //borrar los datos de la base de datos (salvo el tambo "Cacho")
+		Conexion.db.run('DELETE FROM tambos WHERE id > 1', (err) => {
+				if(err) console.log(err);
+			});
+		Conexion.db.run('DELETE FROM datosPrincipales WHERE idVaca > 14', (err) => {
+				if(err) console.log(err);
+			});
+		Conexion.db.run('DELETE FROM datosSecundarios WHERE idVaca > 14', (err) => {
+				if(err) console.log(err);
+			});
+		console.log('DB limpiada');
 	}
 
 	private static crearTambo(name) {
@@ -49,8 +62,31 @@ export default class Conexion {
 					console.log(err);
 					rej(false);
 				}
-				res(true);
 			});
+			Conexion.db.all(`select S.idVaca from datosPrincipales P inner join datosSecundarios S on P.idVaca=S.idVaca where P.tambo = ?`, tambo.id, (err, result) => {
+				if (err) {
+					console.log(err);
+					rej(err);
+				} else {
+					if(result.length != 0){
+						for(let dato of result){
+							Conexion.db.run(`DELETE FROM datosSecundarios WHERE idVaca= ?`, dato.idVaca, (err) => {
+								if (err) {
+									console.log(err);
+									rej(err);
+								}
+							});
+						}
+					}
+				}
+			});
+			Conexion.db.run(`DELETE FROM datosPrincipales WHERE tambo = ?`, tambo.id, (err) => {
+				if (err) {
+					console.log(err);
+					rej(err);
+				}
+			});
+			res(true);
 		});
 	}
 
@@ -67,21 +103,22 @@ export default class Conexion {
 
 	private static subirControlPrincipal(datos: tipoControlSubir){
 		return new Promise((res, rej) => {
-			for (let dato of datos.nv){
+			for (let dato of datos.nv){ //datos nuevos
 				Conexion.db.run('INSERT INTO datosPrincipales(rp,lactancia,parto,del,tacto,tambo) VALUES(?,?,?,?,?,?)', 
 					[dato.rp,dato.lactancia,dato.parto,dato.del,dato.tacto,dato.tambo],
 					err => {
 					if(err) rej(err);
 				})
 			}
-			for (let dato of datos.ac){
+			for (let dato of datos.ac){ //datos que se actualizan
 				Conexion.db.run('UPDATE datosPrincipales SET lactancia = ? parto = ?, del = ?, tacto = ? WHERE rp = ? AND tambo = ?', 
 					[dato.lactancia,dato.parto,dato.del,dato.tacto,dato.rp,dato.tambo],
 					err => {
 					if(err) rej(err);
 				})
 			}
-			for (let dato of datos.br){
+			for (let dato of datos.br){ //datos que se deben borrar
+				console.log(dato);
 				Conexion.db.run('DELETE FROM datosPrincipales WHERE idVaca = ?', 
 					dato,
 					err => {
@@ -125,14 +162,25 @@ export default class Conexion {
 
 	private static verControlSecundario(tambo: number){
 		return new Promise((res, rej) => {
-			Conexion.db.all("select A.leche,A.rcs,A.totalCs,A.tanque,A.score,A.fecha,A.idVaca from datosSecundarios A inner join datosPrincipales B on A.idVaca=B.idVaca where B.tambo = ?", tambo, (err, result) => {
+			Conexion.db.all(`select S.idVaca,S.rcs, S.fecha, S.leche, S.tanque, S.score from datosPrincipales P inner join datosSecundarios S on P.idVaca=S.idVaca where P.tambo = ?`, tambo, (err, result) => {
 				if (err) {
 					console.log(err);
 					rej(err);
 				} else res(result);
 			});
 		});
-	}
+	}	
+
+	private static verControlSecundarioOrdenado(tambo: number){
+		return new Promise((res, rej) => {
+			Conexion.db.all(`select S.idVaca, S.rcs, S.fecha, S.leche, S.tanque, S.score from datosPrincipales P inner join datosSecundarios S on P.idVaca=S.idVaca where P.tambo = ? ORDER BY S.idVaca DESC;`, tambo, (err, result) => {
+				if (err) {
+					console.log(err);
+					rej(err);
+				} else res(result);
+			});
+		});
+	}	
 
 	private static devolver(arg) {
 		return new Promise((res, rej) => {

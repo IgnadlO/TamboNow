@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>tanque</title>
+	<title>‎Servet | Tanque</title>
 	<link rel="stylesheet" type="text/css" href="../css/index.css">
 	<link rel="stylesheet" type="text/css" href="../css/tanque.css">
 </head>
@@ -10,7 +10,7 @@
 	<ul class="header__lista"><!-- Botones de la barra -->
     <li class="header__item" style="width: 15em;">
     	<div class="header__Tambo">
-    		<a class="header__dr" style="padding-left: 15px;" href="/">San Bernardo</a>
+    		<a class="header__dr" style="padding-left: 15px;" id="tamboActivo" href="/"></a>
     	</div>
     </li>
     <li class="header__flex">
@@ -67,7 +67,7 @@
 					</thead>
 				<tr>
 					<td>  %  DE  CÉLULAS  SOMÁTICAS  QUE  APORTAN   ESTAS  VCS.  AL  TANQUE  CON  RESPECTO  AL  TOTAL  DE  CÉLULAS</td>
-					<td id="vcsAporte">29,0%</td>
+					<td id="vcsPorcentaje">29,0%</td>
 				</tr>
 		</table>
 				<table class="tabla__info">
@@ -78,14 +78,14 @@
 						</tr>
 					</thead>
 				<tr>
-					<td>RCS.  PROMEDIO  RODEO  SIN  LAS  14  VACAS  LISTADAS  PERDIENDO   351,4  LTS.  DE  LECHE</td>
+					<td>RCS.  PROMEDIO  RODEO  SIN  LAS  <span id="vcsAportanD"></span>  VACAS  LISTADAS  PERDIENDO   <span id="lecheAportan"></span>   LTS.  DE  LECHE</td>
 					<td id="rcsPromSin">265.944/ML</td>
 				</tr>
 		</table>
 		</div>
 		<div class="contenedor__tabla scroll">
-        	<table class="table">
-        	<thead>
+        	<table class="table" id="tabla">
+        	<thead id="thead">
 				<th>N°</th>
 				<th>RP</th>
 				<th>Lact.</th>
@@ -100,7 +100,7 @@
 				<th><div class="mes"><span>mar-21</span><span>Score</span></div></th>
 				<th>ACP</th>
 			</thead>
-        		<tbody>
+        		<tbody id="tbody">
         			<tr>
             			<td>1</td><td class="rp">6689</td><td>2</td><td>01/03/20</td><td>177</td><td>P</td><td>0,2</td><td>3,3</td><td class="scoreAlto">4,2</td><td class="leche">23,6</td><td class="tanque">4,31%</td><td class="scoreAlto">7,0</td><td></td>
         			</tr>
@@ -117,5 +117,6 @@
     		</table>    
 		</div>
 	</main>
+	<script type="module" src="../js/tanque.js"></script>
 </body>
 </html>
