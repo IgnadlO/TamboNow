@@ -16,6 +16,7 @@ class UiC {
   private static formFile = document.getElementById("fileExcel")!;
   private static tabla = document.getElementById("tbody")!;
   private static tablaNuevoControl = document.getElementById("tablaNuevoControl")!;
+  private static modifiTabla = false;
 
   static main() {
     UiC.botonAceptar.addEventListener("click", UiC.subirControl);
@@ -75,11 +76,13 @@ class UiC {
       boton.style.display = 'block';
       UiC.borrarTabla();
       UiC.bajarDatosControl();
+      UiC.modifiTabla = false;
     }
     else {
       UiC.tablaNuevoControl.style.display = 'flex';
       boton.style.display = 'none';
       UiC.borrarTabla();
+      UiC.modifiTabla = true;
     }
   }
 
@@ -158,6 +161,7 @@ class UiC {
   }
 
   static crearTablaControl(datos, datosSec) {
+    console.log(datosTambo)
     UiC.tabla.innerHTML = '';
     const vaciarDato = (dato) => (dato == null ? "" : dato);
     for (let i = 0; i <= datos.length - 1; i++) {
@@ -166,7 +170,10 @@ class UiC {
         const campo = document.createElement("td");
         campo.innerText = (tipo == "score" && dato != null)? dato.toFixed(2) : dato;
         campo.id = (tipo == "parto" ? "s" : "n") + "/" + id + "/" + tipo;
-        campo.addEventListener("click", UiC.editarCampo);
+        if(UiC.modifiTabla)
+          campo.addEventListener("click", UiC.editarCampo);
+        else
+          campo.style.cursor = 'auto'
         return campo;
       };
       item.innerHTML = `<td scope="row">${i + 1}</td>`;
@@ -185,8 +192,12 @@ class UiC {
   //(e.target.id[0] == 's')? 'text': 'number'
   static editarCampo(e) {
     const input = document.createElement("td");
-    input.innerHTML = `<input type="text" id="${e.target.id}" size="10" value="${e.target.innerText}">`;
+    if(e.target.id.includes('parto'))
+      input.innerHTML = `<input type="text" id="${e.target.id}" class="input__largo" size="10" value="${e.target.innerText}">`;
+    else
+      input.innerHTML = `<input type="text" id="${e.target.id}" class="input__corto" size="10" value="${e.target.innerText}">`;
     input.addEventListener("keypress", UiC.modificarCampo);
+    input.classList.add('modifi');
     e.target.parentNode.replaceChild(input, e.target);
     const elemento = document.getElementById(e.target.id)!;
     elemento.focus();
@@ -194,16 +205,16 @@ class UiC {
   }
 
   static modificarCampo(e) {
-    if ((e.key != "Enter" && e.type == "keypress") || e.type != "blur")
+    if (e.key != "Enter" && e.type == "keypress")
       return 0;
+    e.target.removeEventListener("blur", UiC.modificarCampo)
     const datosValor = e.target.id.split("/");
     datosTambo[datosValor[1]][datosValor[2]] = e.target.value;
-
-    const campo = document.createElement("td");
-    campo.innerHTML = e.target.value;
-    campo.id = e.target.id;
-    campo.addEventListener("click", UiC.editarCampo);
-    e.target.parentNode.replaceChild(campo, e.target);
+    const padre = e.target.parentNode
+    padre.innerHTML = e.target.value;
+    padre.id = e.target.id;
+    padre.classList.remove('modifi');
+    padre.addEventListener("click", UiC.editarCampo);
   }
 
   static formatearfechaExcel(fechaExcel) {

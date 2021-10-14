@@ -42,7 +42,7 @@
 	color: #fff;
 }
 
-input[type="text"] {
+#buscador {
 	font-size: 20px;
 	padding: 5px 5px;
 }
@@ -59,3 +59,17 @@ input[type="date"] {
 .contenedor__tabla { max-height: 60vh; }
 
 tr { cursor: pointer; }
+
+.modifi {
+	padding: 0;
+}
+
+.input__corto {
+	font-size: 17px;
+	width: 54px;
+}
+
+.input__largo {
+	font-size: 17px;
+	width: 90px;
+}

@@ -10,7 +10,7 @@ export default class UiComun {
     	elemento.innerText = tamboActivo.nombre;
   	}
 
-  		static ordenamiento(valor: string, datosUnificados: datosUni[]): datosUni[]{
+	static ordenamiento(valor: string, datosUnificados: datosUni[]): datosUni[]{
 		if(UiComun.ultimoOrd.tipo == valor) UiComun.ultimoOrd.orden = !UiComun.ultimoOrd.orden;
 		else {
 			UiComun.ultimoOrd.tipo = valor;
