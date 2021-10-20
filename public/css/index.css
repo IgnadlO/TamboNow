@@ -1,10 +1,17 @@
 /*-----------------Cosas----------------------*/
 body{ 
     margin: 0;
-    background: #fff
+    background: #fff;
+    
 }
 
-main{ margin-left: 15em; }
+main{ 
+    margin-left: 15em; 
+    background-image: url("../img/agricultormacho.jpg");
+    background-size: 105em;
+    background-position: 0em;
+    height: 88.3vh;
+}
 
 label {
     color: #666;
@@ -86,6 +93,7 @@ label {
     background-color: #f8f8f8;
     border-bottom: 1px solid #bdbdbd;
 }
+
 
 .header__item{ 
     float: left;

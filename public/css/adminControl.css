@@ -45,6 +45,7 @@
 #buscador {
 	font-size: 20px;
 	padding: 5px 5px;
+	margin-left: 20px;
 }
 
 input[type="date"] {
@@ -56,7 +57,9 @@ input[type="date"] {
 	padding: 0;
 }
 
-.contenedor__tabla { max-height: 60vh; }
+.contenedor__tabla { max-height: 80vh; 
+
+}
 
 tr { cursor: pointer; }
 
@@ -72,4 +75,8 @@ tr { cursor: pointer; }
 .input__largo {
 	font-size: 17px;
 	width: 90px;
+}
+
+#botonNuevoControl{
+	margin: 20px;
 }

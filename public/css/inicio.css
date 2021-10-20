@@ -1,3 +1,4 @@
+main{ padding-top: 50px; }
 .contenedor {
 	margin: auto;
 	border: 1px solid #999;
@@ -5,8 +6,9 @@
 	border-radius: 10px;
 	padding: 1.5%;
 	min-width: 400px;
-	margin-top: 10vh;
+	margin-top: 30vh;
 	max-height: 55vh;
+	background-color: #fff;
 }
 
 .contenedor__input {
@@ -27,7 +29,13 @@ input[type="text"] {
 
 .borrar {
 	color: red;
-	padding: 0;
+	padding: 0;	
+	transition: all 0.1s;
+}
+.borrar:hover{
+	width: 50px;
+	height: 50px;
+	transition: all 0.1s;
 }
 
 tr { cursor: pointer; }
@@ -89,4 +97,12 @@ tr { cursor: pointer; }
 	background-color: white;
 	border-color: white;
 	color: green;
+}
+
+td{
+	font-size: 25px;
+}
+
+.tabla__titulo{
+	font-size: 30px;
 }

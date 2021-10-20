@@ -63,7 +63,24 @@ class Ui {
 
   static borrarTamboValidar(e) {
     const id = (e.target.id == '')? e.target.parentNode.id: e.target.id;
-    if (JSON.parse(id).nombre == 'cacho') return 0;
+    if (JSON.parse(id).nombre == 'cacho'){
+    console.log(id)
+    Ui.tamboSeleccionado = JSON.parse(id);
+    Ui.cuadroValidacion = document.createElement("div");
+    Ui.cuadroValidacion.id = "validacion";
+    Ui.cuadroValidacion.innerHTML = `
+    <h3>AVISO</h3>
+    <label>Hola te cuento que ${Ui.tamboSeleccionado.nombre} no se puede borrar asi que volve por donde entraste</label>
+    <br>
+    `;
+    const elementoChild = document.createElement("div");
+    elementoChild.appendChild(Ui.crearBotones("cancelar"));
+    Ui.cuadroValidacion.appendChild(elementoChild);
+    const contenedor = document.getElementById("contenedor__alerta")!;
+    contenedor.innerHTML = '';
+    contenedor.appendChild(Ui.cuadroValidacion);
+    return 0;
+    }
     console.log(id)
     Ui.tamboSeleccionado = JSON.parse(id);
     Ui.cuadroValidacion = document.createElement("div");
@@ -117,7 +134,7 @@ class Ui {
     for (let i = 0; i <= lista.length - 1; i++) {
       const registro = document.createElement("tr");
       crearTd(lista[i].nombre, 'presionoUnTambo', registro, lista[i].nombre);
-      crearTd(`<buttom class="borrar"> <img src="../img/timescircle.png"> </buttom>`, 'borrarTamboValidar', registro, JSON.stringify(lista[i]) )
+      crearTd(`<img src="../img/timescircle.png" width="40px" height="40px" class="borrar" >`, 'borrarTamboValidar', registro, JSON.stringify(lista[i]) )
       tbody.appendChild(registro);
     }
     tabla.appendChild(tbody);
