@@ -117,7 +117,7 @@ class Ui {
     for (let i = 0; i <= lista.length - 1; i++) {
       const registro = document.createElement("tr");
       crearTd(lista[i].nombre, 'presionoUnTambo', registro, lista[i].nombre);
-      crearTd(`<buttom class="borrar"> X </buttom>`, 'borrarTamboValidar', registro, JSON.stringify(lista[i]) )
+      crearTd(`<buttom class="borrar"> <img src="../img/timescircle.png"> </buttom>`, 'borrarTamboValidar', registro, JSON.stringify(lista[i]) )
       tbody.appendChild(registro);
     }
     tabla.appendChild(tbody);
