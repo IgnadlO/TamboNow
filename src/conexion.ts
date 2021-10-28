@@ -7,6 +7,7 @@ export default class Conexion {
 	private static rutas: object;
 	private static dbPath = `${__dirname}/../schema/database.db`;
 	private static db = new sqlite3.Database(Conexion.dbPath);
+	// private static db = new sqlite3.Database(':memory:');
 
 	static ruta(funcion: string, arg: any) {
 		return Conexion[funcion](arg);
@@ -111,7 +112,7 @@ export default class Conexion {
 				})
 			}
 			for (let dato of datos.ac){ //datos que se actualizan
-				Conexion.db.run('UPDATE datosPrincipales SET lactancia = ? parto = ?, del = ?, tacto = ? WHERE rp = ? AND tambo = ?', 
+				Conexion.db.run('UPDATE datosPrincipales SET lactancia = ?, parto = ?, del = ?, tacto = ? WHERE rp = ? AND tambo = ?', 
 					[dato.lactancia,dato.parto,dato.del,dato.tacto,dato.rp,dato.tambo],
 					err => {
 					if(err) rej(err);

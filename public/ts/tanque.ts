@@ -39,6 +39,7 @@ class Ui {
 		for(let dato of datosUni){
 			totalRcs += dato.rcs;
 		}
+		console.log(datosUni)
 		const promedio = Math.ceil(totalRcs / cantVacas)
 		const promedioSin = Math.ceil((totalRcs - rcsAportan) / (cantVacas - Ui.vcs));
 

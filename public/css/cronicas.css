@@ -39,6 +39,10 @@
 	background: #ff9c9c;
 }
 
+.contenedor__tabla {
+	max-height: 67vh;
+}
+
 .acp1 { background: rgba(255, 255, 204);} 
 .acp2 { background: rgba(255, 255, 153);}
 .acp3 { background: rgba(255, 255, 102); }

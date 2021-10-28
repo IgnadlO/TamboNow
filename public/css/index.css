@@ -1,8 +1,7 @@
 /*-----------------Cosas----------------------*/
 body{ 
     margin: 0;
-    background: #fff;
-    
+    background: #6da943; 
 }
 
 main{ 
@@ -11,6 +10,7 @@ main{
     background-size: 105em;
     background-position: 0em;
     height: 88.3vh;
+    padding-top: 15px;
 }
 
 label {

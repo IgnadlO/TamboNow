@@ -9,7 +9,8 @@
     "watch": "tsc --watch --p public/tsconfig.render.json",
     "build": "tsc --p tsconfig.json && tsc --p public/tsconfig.render.json",
     "pack": "electron-builder--dir",
-    "dist": "electron-builder --win --x64"
+    "dist": "electron-builder --win --x64",
+    "postinstall": "install-app-deps"
   },
   "keywords": [],
   "author": "",
@@ -18,12 +19,19 @@
     "productName": "test",
     "appId": "Servet_App",
     "asarUnpack": [
-      "dist/assets/sqlite.db"
+      "dist/assets/database.db"
     ],
     "win": {
       "target": "NSIS",
       "icon": "build/icono.ico"
-    }
+    },
+    "files": [
+      "public/**/*",
+      "node_modules/**/*",
+      "dist/**/*",
+      "schema/**",
+      "package.json"
+    ]
   },
   "dependencies": {
     "bluebird": "^3.7.2",

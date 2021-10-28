@@ -79,7 +79,7 @@ class Ui {
 				continue;
 			n++;
 			const tr = document.createElement('tr');
-			const num = num => (num == null || num == '')? '' : num.toFixed(2);	
+			const num = num => (num == null || num == '')? '-' : num.toFixed(2);	
 			const scoreT = val => (val != null && val >= limite)? 'scoreAlto': '';
 			let acp = (vaca.score > limite)? 1: 0;
 			let scores = '';
