@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>‎Servet | Distribucion Mensual de RCS</title>
+<link rel="stylesheet" type="text/css" href="../css/index.css">
+	<link rel="stylesheet" type="text/css" href="../css/distribucionrcs.css">
+</head>
+<body>
+    <ul class="header__lista">
+        <li class="header__item" style="width: 15em;">
+            <div class="header__Tambo">
+                <a class="header__dr" id='tamboActivo' style="padding-left: 15px;" href="#"></a>
+            </div>
+        </li>
+    <li class="header__flex">
+    	<span class="header__dr">Analisis de RCS</span>
+    </li>
+    </ul>
+    <nav class="menu" id="menu">
+		<div class="menu__contenido">
+			<a href="./index.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Inicio</label>
+				</div>
+			</a>
+			<a href="./adminControl.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Administrador de Vacas</label>
+				</div>
+			</a>
+			<a href="./cronicas.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Cronicas</label>
+				</div>
+			</a>
+			<a href="./tanque.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link select">Aporte al Tanque</label>
+				</div>
+			</a>
+		</div>
+		<div class="menu__pie">
+			<div class="menu__texto">
+				<label class="texto menu__option">Graficos</label>
+			</div>
+			<a href="./analisisrcs.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Analisis de RCS</label>
+				</div>
+			</a>
+			<a href="./distribucionrcs.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Distribucion mensual de RCS</label>
+				</div>
+			</a>
+		</div>
+	</nav>
+<main>
+<table class="cuadrodistribucion">
+    <caption>RCS DE TANQUE SEGUN CONTROL LECHERO</caption>
+    <tr>
+      <th scope="col">Meses</th>
+      <th>RCS/ML</th>
+    </tr>
+    <tr>
+      <th>Noviembre-20</th>
+      <td>252.451ML</td>
+    </tr>
+    <tr>
+      <th>Enero-21</th>
+      <td>333.623ML</td>
+    </tr>  
+    <tr>
+      <th>Febrero-21</th>
+      <td>337.891ML</td>
+    </tr> 
+    <tr>
+      <th>Marzo-21</th>
+      <td>324.266ML</td>
+    </tr> 
+  </table>
+</main>
+<div>
+    <canvas id="myChart"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script class="chartdistribucion">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.cuadrodistribucion{
+    font-size: 1em;
+    border-radius: 20px;
+	background-color: white;
+	height: 150px;
+	margin: auto;
+	width: 20%;
+	border: 1px solid green;
+	padding: 20px;
+}

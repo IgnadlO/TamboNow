@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>‎Servet | Planilla de analisis de RCS</title>
+<link rel="stylesheet" type="text/css" href="../css/index.css">
+	<link rel="stylesheet" type="text/css" href="../css/analisisrcs.css">
+</head>
+<body>
+    <ul class="header__lista">
+        <li class="header__item" style="width: 15em;">
+            <div class="header__Tambo">
+                <a class="header__dr" id='tamboActivo' style="padding-left: 15px;" href="#"></a>
+            </div>
+        </li>
+    <li class="header__flex">
+    	<span class="header__dr">Analisis de RCS</span>
+    </li>
+    </ul>
+    <nav class="menu" id="menu">
+		<div class="menu__contenido">
+			<a href="./index.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Inicio</label>
+				</div>
+			</a>
+			<a href="./adminControl.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Administrador de Vacas</label>
+				</div>
+			</a>
+			<a href="./cronicas.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Cronicas</label>
+				</div>
+			</a>
+			<a href="./tanque.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link select">Aporte al Tanque</label>
+				</div>
+			</a>
+		</div>
+		<div class="menu__pie">
+			<div class="menu__texto">
+				<label class="texto menu__option">Graficos</label>
+			</div>
+			<a href="./analisisrcs.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Analisis de RCS</label>
+				</div>
+			</a>
+			<a href="./distribucionrcs.html">
+				<div class="menu__opcion">
+					<label class="texto menu__link">Distribucion mensual de RCS</label>
+				</div>
+			</a>
+		</div>
+	</nav>
+<main>
+    <label class="labelrcs">
+        Cuadro comparativo entre RCS y promedio de produccion individual/VO
+    </label>
+</main>
+<div>
+    <canvas id="myChart"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script class="chartanalisis">
+    var ctx= document.getElementById('myChart').getContext("2d");
+    var myChart= new Chart(ctx,{
+        type:"bar",
+        data:{
+            labels:['Julio','Agosto','Septiembre','Octubre','Noviembre'],
+            datasets:[{
+                label:'Balance Meses Anteriores',
+                data:[5000,-900,3500,2300,'<%= ingresos - gastoTotal %>'],
+                backgroundColor:[
+                    'rgb(2, 119, 189)'
+                ]
+            }]
+        }
+    });
+</script>
+</body>
+</html>
