@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-import { datosTambo, datosPrin, datosSec, datosUni } from '../../servet';
+import { datosTambo, datosPrin, datosSec, datosUni } from '../../index';
 
 export default class Manejo {
 	static separarPorFecha(datosSec: datosSec[]): [string[], datosSec[][]]{
@@ -92,5 +92,54 @@ export default class Manejo {
 		console.log(nuevoArray)
 
 		return [mesesP, nuevoArray];
+	}
+
+	static promedios(tamboActivo: datosTambo): [number[], number[], string[]]{
+		const datosSec = ipcRenderer.sendSync("conParametros", "verControlSecundarioOrdenado", tamboActivo.id);
+		const [mesesP, datosSecFechas] = Manejo.separarPorFecha(datosSec)
+		const rcsTotal: number[] = [];
+		const lecheTotal: number[] = [];
+		const fechas: string[] = [];	
+		
+		console.log(datosSecFechas)
+		for (let dato of datosSecFechas){
+			let rcs: number = 0;
+			let leche: number = 0;
+			for(let i in dato){
+				rcs += dato[i].rcs;
+				leche += dato[i].leche;
+			}
+			rcsTotal.push(Math.round(rcs/dato.length));
+			const promLeche: number = leche/dato.length;
+			lecheTotal.push(promLeche);
+			fechas.push(dato[0].fecha)
+		}
+
+		console.log(rcsTotal);
+		console.log(lecheTotal);
+		console.log(fechas);
+
+		return [rcsTotal.reverse(), lecheTotal.reverse(), fechas.reverse()];
+	}
+
+	static distribucion(tamboActivo: datosTambo): [number[], string[]]{
+		const datosSec = ipcRenderer.sendSync("conParametros", "verControlSecundarioOrdenado", tamboActivo.id);
+		const [mesesP, datosSecFechas] = Manejo.separarPorFecha(datosSec)
+		const rcsTotal: number[] = [];	
+		const fechas: string[] = [];
+		
+		for (let dato of datosSecFechas){
+			let rcs: number = 0;
+			for(let i in dato){
+				rcs += dato[i].rcs;
+			}
+			rcsTotal.push(rcs);
+			fechas.push(dato[0].fecha)
+		}
+
+		console.log(rcsTotal);
+		console.log(fechas);
+
+		return [rcsTotal.reverse(), fechas.reverse()];
 	}
 }

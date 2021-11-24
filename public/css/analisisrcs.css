@@ -4,6 +4,7 @@
 	text-align: center;
     padding-left: 20px; 
 }
+
 .chartanalisis{
 	background-color: white;
 	position: absolute;
@@ -11,5 +12,14 @@
 	bottom: 0;
 	margin: auto;
 	border: 1px solid green;
+}
 
+.contenedor__canvas {
+	margin: 10vh auto 0;
+	height: 60vh;
+	width: 80%;
+	max-width: 80%;
+	background-color: white;
+	padding: 10px;
+	border-radius: 10px;
 }

@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-import { datosTambo, datosPrin, datosSec, datosUni } from '../../servet';
+import { datosTambo, datosPrin, datosSec, datosUni } from '../../index';
 
 export default class UiComun {
 	private static ultimoOrd = {tipo: '', orden: true};

@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import conexion from "./conexion";
 import Main from "./main";
-import { datosTambo } from '../servet'
+import { datosTambo } from '../index'
 
 export default class Eventos {
 	public static tamboActivo: datosTambo;

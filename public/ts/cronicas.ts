@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-import { datosTambo, datosPrin, datosSec, datosUni } from '../../servet';
+import { datosTambo, datosPrin, datosSec, datosUni } from '../../index';
 import Manejo from './manejoTambo.js'
 import UiComun from './UiComun.js'
 

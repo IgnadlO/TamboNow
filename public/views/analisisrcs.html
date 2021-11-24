@@ -36,7 +36,7 @@
 			</a>
 			<a href="./tanque.html">
 				<div class="menu__opcion">
-					<label class="texto menu__link select">Aporte al Tanque</label>
+					<label class="texto menu__link">Aporte al Tanque</label>
 				</div>
 			</a>
 		</div>
@@ -46,7 +46,7 @@
 			</div>
 			<a href="./analisisrcs.html">
 				<div class="menu__opcion">
-					<label class="texto menu__link">Analisis de RCS</label>
+					<label class="texto menu__link select">Analisis de RCS</label>
 				</div>
 			</a>
 			<a href="./distribucionrcs.html">
@@ -60,26 +60,10 @@
     <label class="labelrcs">
         Cuadro comparativo entre RCS y promedio de produccion individual/VO
     </label>
+    <div class="contenedor__canvas">
+    	<canvas style="max-height: 60vh;" id="myChart"></canvas>
+  	</div>
 </main>
-<div>
-    <canvas id="myChart"></canvas>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var ctx= document.getElementById('myChart').getContext("2d");
-    var myChart= new Chart(ctx,{
-        type:"bar",
-        data:{
-            labels:['Julio','Agosto','Septiembre','Octubre','Noviembre'],
-            datasets:[{
-                label:'Balance Meses Anteriores',
-                data:[5000,-900,3500,2300,'<%= ingresos - gastoTotal %>'],
-                backgroundColor:[
-                    'rgb(2, 119, 189)'
-                ]
-            }]
-        }
-    });
-</script>
+<script type="module" src="../js/analisisrcs.js"></script>
 </body>
 </html>

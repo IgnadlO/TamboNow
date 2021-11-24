@@ -1,7 +1,7 @@
 const xlsx = require("xlsx");
 const path = require("path");
 const { ipcRenderer } = require("electron");
-import {datosPrin, datosSec, datosTambo, datosExcel, datosIndex} from '../../servet';
+import {datosPrin, datosSec, datosTambo, datosExcel, datosIndex} from '../../index';
 
 let datosTambo: datosPrin[] = [];
 let datosTamboSec: datosSec[] = [];

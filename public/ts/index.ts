@@ -1,6 +1,6 @@
 const path = require("path");
 const { ipcRenderer } = require("electron");
-import {datosTambo} from '../../servet';
+import {datosTambo} from '../../index';
 
 class manejoTambos {
   static tambos: datosTambo[];

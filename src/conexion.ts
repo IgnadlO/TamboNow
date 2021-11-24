@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as sqlite3 from "sqlite3";
-import { datosPrin, datosSec, tipoControlSubir } from '../servet'
+import { datosPrin, datosSec, tipoControlSubir } from '../index'
 sqlite3.verbose();
 
 export default class Conexion {
