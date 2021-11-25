@@ -92,7 +92,16 @@ export default class Manejo {
 		console.log('length de array es ' + nuevoArray.length)	
 		console.log(nuevoArray)
 
-		return [mesesP, nuevoArray];
+		const arraySeguro = [];
+		const rps = [];
+		nuevoArray.forEach(val => {
+			if(!rps.includes(val.rp)){
+				rps.push(val.rp);
+				arraySeguro.push(val);
+			}
+		})
+
+		return [mesesP, arraySeguro];
 	}
 
 	static promedios(tamboActivo: datosTambo): [number[], number[], string[]]{
@@ -142,6 +151,23 @@ export default class Manejo {
 		console.log(fechas);
 
 		return [rcsTotal.reverse(), fechas.reverse()];
+	}
+
+	static produccion(tamboActivo: datosTambo): [number[], string[]]{
+		const datosSec = ipcRenderer.sendSync("conParametros", "verControlSecundarioOrdenado", tamboActivo.id);
+		const [mesesP, datosSecFechas] = Manejo.separarPorFecha(datosSec)
+		const lecheTotal: number[] = [];	
+		const fechas: string[] = [];
+		
+		for (let dato of datosSecFechas){
+			let leche: number = 0;
+			for(let i in dato){
+				leche += dato[i].leche;
+			}
+			lecheTotal.push(Math.round(leche));
+			fechas.push(dato[0].fecha)
+		}
+		return [lecheTotal.reverse(), fechas.reverse()];
 	}
 
 	static datosCronicas(tamboActivo) {
