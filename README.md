@@ -27,6 +27,7 @@ de separacion con respecto al anterior ya que eso es lo que ocurre en la realida
 - Listar Vcs. que mas aportan al Tanque
 - Graficar Distribucion del Rcs Mensual
 - Graficar Relacion Rcs y Produccion
+- Graficar Produccion Mensual
 - Descargar Tablas en Excel
 
 ### Lista de funcionalidades Extra
