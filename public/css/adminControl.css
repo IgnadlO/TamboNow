@@ -63,6 +63,7 @@ input[type="date"] {
 .contenedor__tabla { max-height: 70vh; }
 
 tr { cursor: pointer; }
+th { cursor: default; }
 
 .modifi {
 	padding: 0;
@@ -80,4 +81,13 @@ tr { cursor: pointer; }
 
 #botonNuevoControl{
 	margin: 0 20px 20px 20px;
+}
+
+#descarga {
+	color: #4caf50;
+	font-size: 25px;
+}
+
+#descarga:hover {
+	color: #666;
 }

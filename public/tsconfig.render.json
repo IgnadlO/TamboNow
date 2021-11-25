@@ -3,7 +3,7 @@
     "target": "ES2015",
     "moduleResolution": "node",
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "outDir": "js",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

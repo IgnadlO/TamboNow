@@ -1,5 +1,6 @@
 const { ipcRenderer } = require("electron");
 import { datosTambo, datosPrin, datosSec, datosUni } from '../../index';
+import UiComun from './UiComun.js'
 
 export default class Manejo {
 	static separarPorFecha(datosSec: datosSec[]): [string[], datosSec[][]]{
@@ -141,5 +142,78 @@ export default class Manejo {
 		console.log(fechas);
 
 		return [rcsTotal.reverse(), fechas.reverse()];
+	}
+
+	static datosCronicas(tamboActivo) {
+		const [meses, datosUni] = Manejo.unificador(tamboActivo)
+		const datosCronica = []
+		datosCronica.push(["Rp", "Lactancia", "Parto", "DEL", "Tacto", "Scores", "Leche", "Tanque", "Score Actual", "ACP"])
+		for(let x = 0; x < 2; x++){
+			const esVaca = (x == 1)? true : false; 
+			const limite = (esVaca)? 4 : 3;
+			let i = -1;
+			let n = 0;
+			for (let vaca of datosUni){
+				i++;
+				const scoreActual: number | null = (vaca.score == null)? 0 : vaca.score;
+				if (scoreActual == null) continue;
+				if (esVaca == true && (vaca.lactancia == 1 || scoreActual < 4))
+					continue;	
+				else if (esVaca == false && (vaca.lactancia != 1 || scoreActual < 3))
+					continue;
+				n++;
+				const num = num => (num == null || num == '')? '-' : num.toFixed(2);	
+				const scoreT = val => (val != null && val >= limite)? 'scoreAlto': '';
+				let acp = (vaca.score > limite)? 1: 0;
+				let scores = '';
+				let max = 0;
+				for(let iF = meses.length - 2; iF >= 0; iF--){
+					max++;
+					if (max >= 5) break;
+					const score = (vaca.scoresOld == undefined)? 0: vaca.scoresOld[iF]; 
+					scores += `| ${num(score)} `;
+					if(vaca.scoresOld[iF] > limite)
+						acp++;
+				}
+				datosCronica.push([vaca.rp,vaca.lactancia,vaca.parto,vaca.del,(vaca.tacto == null)? '': vaca.tacto,scores,num(vaca.leche),num(vaca.tanque),num(vaca.score),acp])
+			}
+		}
+		return datosCronica;
+	}
+
+	static datosAporte(tamboActivo) {
+		const [meses, datosUni] = Manejo.unificador(tamboActivo)
+		const cantVacas = datosUni.length;
+		const vcs = Math.ceil(cantVacas * 0.10);
+		const datosUnidos = UiComun.ordenamiento("tanque", datosUni);
+		const datosUnificados = [];
+		for(let i = 0; i < vcs; i++){
+			datosUnificados.push(datosUnidos[i])
+		}
+		const datosAporte = []
+		datosAporte.push(["Rp", "Lactancia", "Parto", "DEL", "Tacto", "Scores", "Leche", "Tanque", "Score Actual", "ACP"])
+		let i = -1;
+		let n = 0;
+
+		for (let vaca of datosUnificados){
+			i++;
+			n++;
+			const limite = (vaca.lactancia > 1)? 4 : 3;
+			const tr = document.createElement('tr');
+			const num = num => (num == null || num == '')? '' : num.toFixed(2);	
+			const scoreT = val => (val != null && val >= limite)? 'scoreAlto': '';
+			let acp = (vaca.score > limite)? 1: 0;
+			let max = 0;
+			let scores = '';
+			for(let iF = meses.length - 2; iF >= 0; iF--){
+				max++;
+				if (max >= 5) break;
+				scores += `| ${num(vaca.scoresOld[iF])}`;
+				if(vaca.scoresOld[iF] > limite)
+					acp++;
+			}
+			datosAporte.push([vaca.rp,vaca.lactancia,vaca.parto,vaca.del,(vaca.tacto == null)? '': vaca.tacto,scores,num(vaca.leche),num(vaca.tanque),num(vaca.score),acp])
+		}
+		return datosAporte;
 	}
 }

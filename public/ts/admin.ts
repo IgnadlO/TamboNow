@@ -2,6 +2,7 @@ const xlsx = require("xlsx");
 const path = require("path");
 const { ipcRenderer } = require("electron");
 import {datosPrin, datosSec, datosTambo, datosExcel, datosIndex} from '../../index';
+import Manejo from './manejoTambo.js'
 
 let datosTambo: datosPrin[] = [];
 let datosTamboSec: datosSec[] = [];
@@ -29,6 +30,38 @@ class UiC {
     .addEventListener('click', UiC.cambiarEstadoTablaNuevoControl)
     document.getElementById('buscador')!
     .addEventListener('keyup', UiC.buscador)
+    UiC.descargarExcel();
+  }
+
+   static descargarExcel() {
+    var intro = xlsx.utils.json_to_sheet([
+      ["", ""],
+      ["Generado", "Por TamboNow"],
+      ["", ""],
+      ["Tambo: ", UiC.tamboActivo.nombre],
+      ["", ""],
+      ["Hojas ", ""],
+      ["Cronicas:", "Encontrara una tabla relacionada con las vacas que poseen Mastitis (score superior a 4), ACP indica la cantidad de meses que lo poseen"],
+      ["Aporte:", "Indica cuales son las vacas que mas celulas somaticas aportan al tanque del cual se deduce el rcs"]]);
+    var ws = xlsx.utils.json_to_sheet(Manejo.datosCronicas(UiC.tamboActivo));
+    var ws2 = xlsx.utils.json_to_sheet(Manejo.datosAporte(UiC.tamboActivo));
+    var wb = xlsx.utils.book_new();
+    console.log(Manejo.datosAporte(UiC.tamboActivo))
+    wb.Props = {
+    Title: "Tambo " + UiC.tamboActivo.nombre,
+    Subject: "Tablas",
+    Author: "TamboNow",
+    CreatedDate: new Date()
+    };
+    wb.SheetNames.push("Introduccion", "Conicas", "Aporte");
+    wb.Sheets["Introduccion"] = intro;
+    wb.Sheets["Conicas"] = ws;
+    wb.Sheets["Aporte"] = ws2;
+    var wbout = xlsx.write(wb, {bookType:'xlsx',  type: 'binary'});
+    const hola = xlsx.writeFile(wb, "Excel.xlsx", {bookType:'xlsx',  type: 'binary'})
+    const descarga = document.getElementById('descarga')! as HTMLAnchorElement;
+    descarga.href = "../../Excel.xlsx"
+    descarga.download= UiC.tamboActivo.nombre + ".xlsx";
   }
 
   static buscador(e){

@@ -61,3 +61,7 @@
 }
 
 .scoreAlto { color: #dc3545; }
+
+.table th {
+	cursor: pointer;
+}

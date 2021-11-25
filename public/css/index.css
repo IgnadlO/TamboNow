@@ -230,7 +230,6 @@ label {
 .table th{
     color: var(--cPrin);
     border-bottom: 1px solid var(--cPrin);
-    cursor: default;
 }
 
 .thead{
@@ -251,6 +250,6 @@ label {
 /*-<a> no lleva decoracion. Punto-*/
 a{ text-decoration: none; }
 
-input[type="file"] {
+#fileExcel {
     display: none;
 }
